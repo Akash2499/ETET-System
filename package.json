@@ -1,0 +1,23 @@
+{
+  "name": "etet-system",
+  "version": "1.0.0",
+  "description": "Group Project CS546 Web Programing ",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Akash2499/ETET-System.git"
+  },
+  "author": "ETET Systems",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Akash2499/ETET-System/issues"
+  },
+  "homepage": "https://github.com/Akash2499/ETET-System#readme",
+  "dependencies": {
+    "mongodb": "^4.12.1"
+  }
+}
