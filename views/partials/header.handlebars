@@ -1,13 +1,18 @@
 <nav>
-  <a href="/">ETET</a>
-  <div id="navbarNav">
-    <ul >
-      <li>
-        <a href="/">Dashboard</a>
-      </li>
-      <li>
-        <a href="/activity">My Activity</a>
-      </li>
-    </ul>
-  </div>
+    <a href="/">ETET</a>
+    <div id="navbarNav">
+        <ul >
+            {{#if login}}
+                <li>
+                    <a href="/">Dashboard</a>
+                </li>
+                <li>
+                    <a href="/activity">My Activity</a>
+                </li>
+                <li>
+                    <a href="/logout">Logout</a>
+                </li>
+            {{/if}}
+        </ul>
+    </div>
 </nav>

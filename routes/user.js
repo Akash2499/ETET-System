@@ -64,7 +64,7 @@ router
   .route('/dashboard')
   .get(async (req,res) => {
     if(req.session.user){
-        return res.render('dashboard',{userData: req.session.user})
+        return res.render('dashboard',{userData: req.session.user, login: true})
     }
     else{
         return res.redirect('/')
@@ -72,6 +72,13 @@ router
   })
 
 
+
+router
+  .route('/logout')
+  .get(async (req,res) => {
+    req.session.destroy();
+    return res.render('logout')
+  })
 
 
 module.exports = router;
