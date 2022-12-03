@@ -1,1 +1,1 @@
-# ETET-System
+# Easy Transfer and Expense Tracking System

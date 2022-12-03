@@ -11,6 +11,14 @@ app.set('view engine', 'handlebars');
 const static = express.static(__dirname + '/public');
 app.use('/public', static);
 
+app.use(session({
+    name: 'AuthCookie',
+    secret: 'This cookie is used to determine login info',
+    resave: false,
+    saveUninitialized: true
+  }));
+  
+
 app.use('/login', (req,res, next) => {
     if(req.session.user){
         return res.redirect('/dashboard')
