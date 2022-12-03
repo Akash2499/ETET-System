@@ -32,7 +32,7 @@ router
     catch(e){
         return res.status(400).render('login',{error : e.toString()})
     }
-  })
+  }) 
 
 router
   .route('/register')
