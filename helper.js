@@ -6,6 +6,7 @@ function checkUsername(username){
 
 function checkPassword(password){
     //code for function checkPassword
+    //this is harshil's comment
 }
 
 
