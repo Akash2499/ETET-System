@@ -80,5 +80,23 @@ router
     return res.render('logout')
   })
 
+router
+  .route('/group/:groupId')
+  .get(async (req,res) => {
+    if(!req.session.user){
+      return res.redirect('/')
+    }
+    let groupId = req.params.groupId;
+    try{
+      //check if groupid is valid 
+      //also check if the user is present in that group
+      //if valid store group details onto groupDetails variable
+      let groupDetails = {};
+      return res.render('group',{groupId : groupId, groupDetails : groupDetails})
+    }
+    catch(e){
+      return res.render('404error',{message: '404: Group not Found'})
+    }
+  })
 
 module.exports = router;
