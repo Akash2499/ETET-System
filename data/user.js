@@ -17,10 +17,15 @@ async function checkUser(email,password){
 }
 
 
+async function getUserDetails(userId){
+    //function to get user details
+}
+
 
 
 
 module.exports = {
     createUser,
-    checkUser
+    checkUser,
+    getUserDetails
 }

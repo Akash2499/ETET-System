@@ -1,16 +1,16 @@
-<nav>
-    <a href="/">ETET</a>
-    <div id="navbarNav">
-        <ul >
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">ETET</a>
+    <div id="navbarNav" class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
             {{#if login}}
-                <li>
-                    <a href="/">Dashboard</a>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Dashboard</a>
                 </li>
-                <li>
-                    <a href="/activity">My Activity</a>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/activity">My Activity</a>
                 </li>
-                <li>
-                    <a href="/logout">Logout</a>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/logout">Logout</a>
                 </li>
             {{/if}}
         </ul>
