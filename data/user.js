@@ -2,7 +2,7 @@
 
 const mongoCollections = require('../config/mongoCollections');
 const users = mongoCollections.users;
-const helper = require('../helpers');
+const helper = require('../helper');
 const bcryptjs = require('bcryptjs');
 const saltRounds = 16;
 
