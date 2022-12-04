@@ -98,5 +98,15 @@ router
       return res.render('404error',{message: '404: Group not Found'})
     }
   })
+  .post(async (req,res) => {
+    try{
+      //check if the group details are correct 
+      //create the group and update the userDetails in the cookie
+      return res.redirect(`/group/${req.params.groupId}`)
+    }
+    catch(e){
+      return res.render('createGroup')
+    }
+  })
 
 module.exports = router;
