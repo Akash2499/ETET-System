@@ -21,7 +21,9 @@ async function getUserDetails(userId){
     //function to get user details
 }
 
-
+async function findUserByName(name){
+    //returns list of users
+}
 
 
 module.exports = {
