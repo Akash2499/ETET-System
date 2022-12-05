@@ -126,7 +126,10 @@ function checkAmount(amount){
     throw 'Invalid Amount';
 }
 
-function checkTransactionName(name){
+function checkString(name){
+    if(!name){
+        throw 'Enter a value'
+    }
    
     if(typeof name != 'string' || name.trim().length == 0){
         throw 'Invalid Transaction Name';
@@ -154,7 +157,7 @@ module.exports = {
     checkDOB,
     checkFnameLname,
     checkGroupName,
-    checkTransactionName,
+    checkString,
     checkUserId,
     checkObjectId
 }
