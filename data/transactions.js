@@ -15,7 +15,14 @@ const addTransaction = async (
     description,
     comments
 ) => {
-
+    for(let i =0; i< userIds.length;i++){
+        checkObjectId(userIds[i]);
+    }
+    helper.checkString(name);
+    helper.checkObjectId(paidBy);
+    
+    helper.checkString(description);
+    
     name = name.trim()
     category = category.trim()
     paidBy = paidBy.trim()

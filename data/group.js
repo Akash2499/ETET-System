@@ -9,6 +9,7 @@ const createGroup = async (
     name,
     transactions
 ) => {
+
     name = name.trim()
 
     const groupCollection = await groups()
