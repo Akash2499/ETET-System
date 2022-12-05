@@ -5,6 +5,7 @@ const users = mongoCollections.users;
 const helper = require('../helper');
 const bcryptjs = require('bcryptjs');
 const saltRounds = 16;
+const transactions = require('./transactions')
 
 
 async function createUser(all_user_related_arguments){
@@ -25,9 +26,39 @@ async function findUserByName(name){
     //returns list of users
 }
 
+const getUserTransactions = async (userId) => {
+    userId = userId.trim()
+    const userObj = await getUserDetails(userId);
+    return userObj.transactions
+}
+
+const getUserTransactionsByMonth = async (userId, month) => {
+    userId = userId.trim()
+    month = month.trim()
+    let userObj = await getUserDetails(userId);
+    userObj.transactions = userObj.transactions.filter(async (transactionId)=>{
+        let transactionObj = await transactions.getTransactionById(transactionId)
+        return parseInt(transactionObj.transactionDate.split("/")[0])==month
+    })
+    return userObj.transactions
+}
+
+const getUserTransactionsByCategory = async (userId, category) => {
+    userId = userId.trim()
+    category = category.trim()
+    let userObj = await getUserDetails(userId);
+    userObj.transactions = userObj.transactions.filter(async (transactionId)=>{
+        let transactionObj = await transactions.getTransactionById(transactionId)
+        return transactionObj.category == category
+    })
+    return userObj.transactions
+}
 
 module.exports = {
     createUser,
     checkUser,
-    getUserDetails
+    getUserDetails,
+    getUserTransactions,
+    getUserTransactionsByMonth,
+    getUserTransactionsByCategory
 }
