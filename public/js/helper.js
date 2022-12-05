@@ -15,9 +15,9 @@ function checkPassword(password){
     if(password.length < 6){
         throw 'Minimum length for password is 6';
     }
-    let regex1= /^.*[A-Z]$/;
-    let regex2=/^.*[0-9]$/;
-    let regex3=/^.*[!@#\$%\^\&*\)\(+=._-]$/;
+    let regex1= /^.*[A-Z].*$/;
+    let regex2=/^.*[0-9].*$/;
+    let regex3=/^.*[!@#\$%\^\&*\)\(+=._-].*$/;
     
     if(regex1.test(password) == false){
         throw 'Passowrd must have at least one uppercase character';
