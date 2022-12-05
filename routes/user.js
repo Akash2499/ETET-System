@@ -92,7 +92,7 @@ router
       //also check if the user is present in that group
       //if valid store group details onto groupDetails variable
       let groupDetails = {};
-      return res.render('group',{groupId : groupId, groupDetails : groupDetails})
+      return res.render('group',{groupId : groupId, groupDetails : groupDetails, login: true})
     }
     catch(e){
       return res.render('404error',{message: '404: Group not Found'})
