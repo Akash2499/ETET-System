@@ -1,10 +1,10 @@
 const mongoCollections = require('../config/mongoCollections');
-const users = mongoCollections.users;
 const transactions = mongoCollections.transactions;
 const helper = require('../helper');
 const bcryptjs = require('bcryptjs');
 const saltRounds = 16;
 const {ObjectId} = require('mongodb')
+const user = require('./user') 
 
 const addTransaction = async (
     userIds,
@@ -35,6 +35,12 @@ const addTransaction = async (
     });
     
     if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Error while adding transaction'
+
+    await user.addTransactionToUser(paidBy)
+    userIds.map(async (userId)=>{
+        await user.addCommentToTransaction(userId)
+    })
+
     return { inserted : true };
 }
 
@@ -141,10 +147,15 @@ const updateTransaction = async (
 const deleteTransaction = async (transactionId) => {
     transactionId = transactionId.trim()
     const transactionCollection = await transactions();
-
+    const transactionObj = await getTransactionById(transactionId)
     const deletionInfo = await transactionCollection.deleteOne({_id: ObjectId(transactionId)})
     if(deletionInfo.deletedCount === 0) 
         throw 'Could not delete transaction'
+
+    await user.deleteTransactionOfUser(transactionObj.paidBy)
+    transactionObj.userIds.map(async (userId)=>{
+        await user.deleteTransactionOfUser(userId)
+    })
 
     return { deleted : true }
 }
@@ -164,42 +175,13 @@ const getAllTransactions = async () => {
     return transactionsList
 }
 
-const getUserTransactions = async (userId) => {
-
-    userId = userId.trim()
-    const transactionsList = await getAllTransactions();
-    const userTransactions =  transactionsList.filter((transactions)=>transactions.paidBy==userId)
-    return userTransactions
-}
-
-const getUserTransactionsByMonth = async (userId, month) => {
-    userId = userId.trim()
-    month = month.trim()
-    const userTransactions = await getUserTransactions(userId)
-    const monthTransactions = userTransactions.filter((transactions)=>{
-        return parseInt(transactions.TransactionDate.split("/")[0])==month
-    })
-    return monthTransactions
-}
-
-const getUserTransactionsByCategory = async (userId, category) => {
-    userId = userId.trim()
-    category = category.trim()
-    const userTransactions = await getUserTransactions(userId)
-    const categoryTransactions = userTransactions.filter((transactions)=>{
-        return transactions.Category = category
-    })
-    return categoryTransactions
-}
-
 module.exports = {
     addTransaction,
-    getUserTransactions,
-    getUserTransactionsByMonth,
-    getUserTransactionsByCategory,
     updateTransaction,
     deleteTransaction,
     addCommentToTransaction,
     updateCommentToTransaction,
-    deleteCommentToTransaction
+    deleteCommentToTransaction,
+    getTransactionById,
+    getAllTransactions
 }
