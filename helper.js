@@ -93,7 +93,6 @@ function checkDOB(date){
     } else if(days < 1 || days > daysInMonth[month-1]){
         throw 'Invalid day';
     }
-    return true;
 }
 function checkBudget(value){
     if(typeof(value) !== 'string'){
@@ -126,18 +125,15 @@ function checkAmount(amount){
     throw 'Invalid Amount';
 }
 
-function checkTransactionName(name){
-   
-    if(typeof name != 'string' || name.trim().length == 0){
-        throw 'Invalid Transaction Name';
+function checkString(name){
+    if(!name){
+        throw 'Enter a value'
     }
-    return true;
 }
 function checkGroupName(name){
     if(typeof name != 'string' || name.trim().length < 2){
         throw 'Invalid Group Name';
     }
-    return true;
 }
 function checkObjectId(id){
     id = id.trim();
@@ -154,7 +150,7 @@ module.exports = {
     checkDOB,
     checkFnameLname,
     checkGroupName,
-    checkTransactionName,
+    checkString,
     checkUserId,
     checkObjectId
 }

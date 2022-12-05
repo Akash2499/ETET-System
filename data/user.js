@@ -29,6 +29,12 @@ async function createUser(
 ){
     //will create a user into the database
     //inputchecking should be done 
+    helper.checkFnameLname(firstName);
+    helper.checkFnameLname(lastName);
+    helper.checkDOB(dateOfBirth);
+    helper.checkEmail(email);
+    helper.checkPassword(password);
+    helper.checkBudget(budget);
 
     email = email.trim().toLowerCase();
     const userCollection = await users();
@@ -61,6 +67,8 @@ async function createUser(
 async function checkUser(email,password){
     //check is user exists in the database
     //input validation here
+    helper.checkEmail(email);
+    helper.checkPassword(password);
 
     email = email.trim().toLowerCase();
     password = password.trim();
@@ -79,6 +87,10 @@ async function checkUser(email,password){
 }
 
 async function deleteGroupFromUser(userId,groupId){
+
+    helper.checkObjectId(userId);
+    helper.checkObjectId(groupId);
+
     let currentUser = await getUserDetails(userId);
     let newGroups = []
     for(let i=0; i<currentUser.groups.length;i++){
@@ -91,7 +103,7 @@ async function deleteGroupFromUser(userId,groupId){
     }
 
     const info = await userCollection.updateOne(
-        {_id: ObjectId(userId)},
+        {_id: ObjectID(userId)},
         {$set: updatedUser}
       );
       if(info.modifiedCount === 0){
@@ -108,8 +120,11 @@ async function updateUser(
     dateOfBirth,
     budget
 ){
-
-
+    helper.checkObjectId(userId);
+    helper.checkFnameLname(firstName);
+    helper.checkFnameLname(lastName);
+    helper.checkDOB(dateOfBirth);
+    helper.checkBudget(budget);
     
     const updatedUser = {
         firstName: firstName.trim().toLowerCase(),
@@ -119,7 +134,7 @@ async function updateUser(
     }
 
     const info = await userCollection.updateOne(
-        {_id: ObjectId(userId)},
+        {_id: ObjectID(userId)},
         {$set: updatedUser}
       );
       if(info.modifiedCount === 0){
@@ -131,6 +146,7 @@ async function updateUser(
 
 async function getUserDetails(userId){
     //function to get user details
+    helper.checkObjectId(userId);
 
     userId = userId.trim();
     const userCollection = await users();
@@ -144,7 +160,7 @@ async function getUserDetails(userId){
 
 async function findUserByName(name){
     //returns list of users
-
+    helper.checkString(name);
     name = name.trim().toLowerCase();
     const allUsers = await getAllUsers();
     let searchResult = [];
@@ -162,6 +178,8 @@ async function findUserByName(name){
 }
 
 async function addTransactionToUser(userId,transactionId){
+    helper.checkObjectId(userId);
+    helper.checkObjectId(transactionId);
     let currentUser = await getUserDetails(userId);
     currentUser.transactions.push(ObjectID(transactionId))
     const updatedUser = {
@@ -169,7 +187,7 @@ async function addTransactionToUser(userId,transactionId){
     }
 
     const info = await userCollection.updateOne(
-        {_id: ObjectId(userId)},
+        {_id: ObjectID(userId)},
         {$set: updatedUser}
       );
       if(info.modifiedCount === 0){
@@ -179,6 +197,8 @@ async function addTransactionToUser(userId,transactionId){
 }
 
 async function deleteTransactionOfUser(userId,transactionId){
+    helper.checkObjectId(userId);
+    helper.checkObjectId(transactionId);
     let currentUser = await getUserDetails(userId);
     let newTransactions = []
     for(let i=0; i<currentUser.transactions.length;i++){
@@ -191,7 +211,7 @@ async function deleteTransactionOfUser(userId,transactionId){
     }
 
     const info = await userCollection.updateOne(
-        {_id: ObjectId(userId)},
+        {_id: ObjectID(userId)},
         {$set: updatedUser}
       );
       if(info.modifiedCount === 0){
@@ -201,9 +221,11 @@ async function deleteTransactionOfUser(userId,transactionId){
 }
 
 async function deleteUser(userId){
+
+    helper.checkObjectId(userId);
     const userCollection = await users();
     const ans = await getUserDetails(userId);
-    const user = await userCollection.deleteOne({_id: ObjectId(userId)});
+    const user = await userCollection.deleteOne({_id: ObjectID(userId)});
     if (user.deletedCount === 0) {
     throw new Error('Could not delete User!');
     }
@@ -211,12 +233,14 @@ async function deleteUser(userId){
 }
 
 const getUserTransactions = async (userId) => {
+    helper.checkObjectId(userId);
     userId = userId.trim()
     const userObj = await getUserDetails(userId);
     return userObj.transactions
 }
 
 const getUserTransactionsByMonth = async (userId, month) => {
+    helper.checkObjectId(userId);
     userId = userId.trim()
     month = month.trim()
     let userObj = await getUserDetails(userId);
@@ -228,6 +252,7 @@ const getUserTransactionsByMonth = async (userId, month) => {
 }
 
 const getUserTransactionsByCategory = async (userId, category) => {
+    helper.checkObjectId(userId);
     userId = userId.trim()
     category = category.trim()
     let userObj = await getUserDetails(userId);
