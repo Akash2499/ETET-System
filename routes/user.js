@@ -21,7 +21,7 @@ router
   .route('/login')
   .post(async (req,res) => {
     try{
-        helper.checkUsername(req.body.email);
+        helper.checkEmail(req.body.email);
         helper.checkPassword(req.body.password);
         req.session.user = {email: 'abc@gmail.com'}
 
@@ -46,7 +46,7 @@ router
   })
   .post(async (req,res) => {
     try{
-        helper.checkUsername(req.body.email);
+        helper.checkEmail(req.body.email);
         helper.checkPassword(req.body.password);
         req.session.user = {email: 'abc@gmail.com'}
 
