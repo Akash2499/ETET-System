@@ -15,20 +15,21 @@ const addTransaction = async (
     description,
     comments
 ) => {
-    for(let i =0; i< userIds.length;i++){
-        checkObjectId(userIds[i]);
-    }
-    helper.checkString(name);
-    helper.checkObjectId(paidBy);
-    
-    helper.checkString(description);
+
+    helper.checkUserId(userIds)
+    userIds = userIds.map((uid)=>{
+        helper.checkObjectId(uid)
+        return uid.trim()
+    })
+    helper.checkString(name)
+    helper.checkObjectId(paidBy)
+    helper.checkString(description)
     
     name = name.trim()
     category = category.trim()
     paidBy = paidBy.trim()
-    groupId = groupId.trim()
     description = description.trim()
-    comments = comments.trim()
+    let transactionDate = helper.getTodaysDate()
 
     const transactionCollection = await transactions()
     const insertInfo = await transactionCollection.insertOne({
@@ -38,7 +39,8 @@ const addTransaction = async (
         paidBy,
         groupId,
         description,
-        comments
+        comments,
+        transactionDate
     });
     
     if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Error while adding transaction'
@@ -52,6 +54,8 @@ const addTransaction = async (
 }
 
 const addCommentToTransaction = async (transactionId, comment) => {
+
+    helper.checkObjectId(transactionId)
     let transactionObj = await getTransactionById(transactionId)
     transactionObj.comments.push({
         _id: new ObjectId(),
@@ -71,8 +75,10 @@ const addCommentToTransaction = async (transactionId, comment) => {
 }
 
 const updateCommentToTransaction = async (transactionId, commentId, comment) => {
+
+    helper.checkObjectId(transactionId)
+    helper.checkObjectId(commentId)
     commentId = commentId.trim()
-    comment = comment.trim()
     let transactionObj = await getTransactionById(transactionId)
     transactionObj.comments = transactionObj.comments.map((c)=>{
         if(c._id.toString() == commentId){
@@ -92,6 +98,9 @@ const updateCommentToTransaction = async (transactionId, commentId, comment) => 
 }
 
 const deleteCommentToTransaction = async (transactionId, commentId) => {
+
+    helper.checkObjectId(transactionId)
+    helper.checkObjectId(commentId)
     commentId = commentId.trim()
     let transactionObj = await getTransactionById(transactionId)
     transactionObj.comments = transactionObj.comments.filter((c)=>c._id.toString()!=commentId)
@@ -119,13 +128,22 @@ const updateTransaction = async (
     comments
 ) => {
 
+    helper.checkObjectId(transactionId)
+    helper.checkUserId(userIds)
+    userIds = userIds.map((uid)=>{
+        helper.checkObjectId(uid)
+        return uid.trim()
+    })
+    helper.checkString(name);
+    helper.checkObjectId(paidBy);
+    helper.checkString(description);
+
     transactionId = transactionId.trim()
     name = name.trim()
     category = category.trim()
     paidBy = paidBy.trim()
     groupId = groupId.trim()
     description = description.trim()
-    comments = comments.trim()
 
     const transactionCollection = await transactions();
     let transactionObj = await getTransactionById(transactionId)
@@ -152,6 +170,7 @@ const updateTransaction = async (
 }  
 
 const deleteTransaction = async (transactionId) => {
+    helper.checkObjectId(transactionId)
     transactionId = transactionId.trim()
     const transactionCollection = await transactions();
     const transactionObj = await getTransactionById(transactionId)
@@ -168,6 +187,7 @@ const deleteTransaction = async (transactionId) => {
 }
 
 const getTransactionById = async (transactionId) => {
+    helper.checkObjectId(transactionId)
     transactionId = transactionId.trim()
     const transactionCollection = await transactions();
     const transactionObj = await transactionCollection.findOne({_id: ObjectId(transactionId)})
