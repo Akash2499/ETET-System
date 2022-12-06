@@ -4,7 +4,7 @@ const mongoCollections = require('../config/mongoCollections');
 const users = mongoCollections.users;
 const helper = require('../helper');
 const bcryptjs = require('bcryptjs');
-const { ObjectID } = require('bson');
+const {ObjectId} = require('mongodb')
 const saltRounds = 16;
 const transactions = require('./transactions')
 
@@ -103,7 +103,7 @@ async function deleteGroupFromUser(userId,groupId){
     }
 
     const info = await userCollection.updateOne(
-        {_id: ObjectID(userId)},
+        {_id: ObjectId(userId)},
         {$set: updatedUser}
       );
       if(info.modifiedCount === 0){
@@ -134,7 +134,7 @@ async function updateUser(
     }
 
     const info = await userCollection.updateOne(
-        {_id: ObjectID(userId)},
+        {_id: ObjectId(userId)},
         {$set: updatedUser}
       );
       if(info.modifiedCount === 0){
@@ -150,7 +150,7 @@ async function getUserDetails(userId){
 
     userId = userId.trim();
     const userCollection = await users();
-    const userPresent = await userCollection.findOne({_id: ObjectID(userId)});
+    const userPresent = await userCollection.findOne({_id: ObjectId(userId)});
     if(userPresent === null){
     throw 'Either the email or password is invalid'
     }
@@ -181,13 +181,13 @@ async function addTransactionToUser(userId,transactionId){
     helper.checkObjectId(userId);
     helper.checkObjectId(transactionId);
     let currentUser = await getUserDetails(userId);
-    currentUser.transactions.push(ObjectID(transactionId))
+    currentUser.transactions.push(ObjectId(transactionId))
     const updatedUser = {
         transactions: currentUser.transactions
     }
 
     const info = await userCollection.updateOne(
-        {_id: ObjectID(userId)},
+        {_id: ObjectId(userId)},
         {$set: updatedUser}
       );
       if(info.modifiedCount === 0){
@@ -225,7 +225,7 @@ async function deleteUser(userId){
     helper.checkObjectId(userId);
     const userCollection = await users();
     const ans = await getUserDetails(userId);
-    const user = await userCollection.deleteOne({_id: ObjectID(userId)});
+    const user = await userCollection.deleteOne({_id: ObjectId(userId)});
     if (user.deletedCount === 0) {
     throw new Error('Could not delete User!');
     }

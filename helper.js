@@ -142,6 +142,30 @@ function checkObjectId(id){
       }
 }
 
+function checkGroupMembers(members){
+    if(!members || members==undefined || !Array.isArray(members)) throw "Group members should be an array"
+    members.map((m)=>{
+        checkObjectId(m)
+    })
+}
+
+function checkGroupTransactions(transactions){
+    if(!transactions || transactions==undefined || !Array.isArray(transactions)) throw "Group transactions should be an array"
+    transactions.map((t)=>{
+        checkObjectId(t)
+    })
+}
+
+const getTodaysDate = () => {
+    today = new Date()
+    day = today.getDate()
+    month = today.getMonth()
+    year = today.getFullYear()
+    day = day < 10 ? '0'+day : day+''
+    month = month < 10 ? '0'+month : month+''
+    return day+"/"+month+"/"+year
+}
+
 module.exports = {
     checkEmail,
     checkPassword,
@@ -152,6 +176,9 @@ module.exports = {
     checkGroupName,
     checkString,
     checkUserId,
-    checkObjectId
+    checkObjectId,
+    checkGroupMembers,
+    checkGroupTransactions,
+    getTodaysDate
 }
 

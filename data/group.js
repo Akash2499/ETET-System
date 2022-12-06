@@ -10,7 +10,13 @@ const createGroup = async (
     transactions
 ) => {
 
+    helper.checkGroupName(name)
+    helper.checkGroupMembers(members)
+    helper.checkGroupTransactions(transactions)
+
     name = name.trim()
+    members = members.map((m)=>m.trim())
+    transactions = transactions.map((t)=>t.trim())
 
     const groupCollection = await groups()
     const insertInfo = await groupCollection.insertOne({
@@ -29,8 +35,16 @@ const updateGroup = async (
     name,
     transactions
 ) => {
+
+    helper.checkObjectId(groupId)
+    helper.checkGroupMembers(members)
+    helper.checkGroupName(name)
+    helper.checkGroupTransactions(transactions)
+
     groupId = groupId.trim()
     name = name.trim()
+    members = members.map((m)=>m.trim())
+    transactions = transactions.map((t)=>t.trim())
 
     const groupCollection = await groups();
     const groupObj = await getGroupById(groupId)
@@ -51,7 +65,10 @@ const updateGroup = async (
 }
 
 const deleteGroup = async (groupId) => {
+
+    helper.checkObjectId(groupId)
     groupId = groupId.trim()
+
     const groupCollection = await groups();
     const groupObj = await getGroupById(groupId)
     groupObj.members.map(async (userId)=>{
@@ -71,6 +88,7 @@ const getAllGroups = async () => {
 }
 
 const getGroupById = async (groupId) => {
+    helper.checkObjectId(groupId)
     groupId = groupId.trim()
     const groupCollection = await groups();
     const groupObj = await groupCollection.findOne({_id: ObjectId(groupId)})
@@ -80,6 +98,7 @@ const getGroupById = async (groupId) => {
 }
 
 const getGroupsByUser = async (userId) => {
+    helper.checkObjectId(userId)
     userId = userId.trim()
     let groupList = await getAllGroups()
     groupList = groupList.filter((group)=>{
