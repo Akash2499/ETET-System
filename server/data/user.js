@@ -257,6 +257,81 @@ const getUserTransactionsByCategory = async (userId, category) => {
     return userObj.transactions
 }
 
+const addFriendToUser = async (userId,friendId) => {
+    helper.checkObjectId(userId);
+    helper.checkObjectId(friendId);
+
+    userId = userId.trim();
+    friendId = friendId.trim();
+
+    let user = getUserDetails(userId);
+    let friend = getUserDetails(friendId);
+    user.friends.push(friendId);
+    friend.friends.push(userId);
+
+    const userCollection = await users();
+    const infoUser = await userCollection.updateOne(
+        {_id: ObjectId(userId)},
+        { $set: { friends : user.friends }}
+      );
+      if(infoUser.modifiedCount === 0){
+        throw new Error('Cannot update User');
+      } 
+    const infoFriend = await userCollection.updateOne(
+        {_id: ObjectId(userId)},
+        { $set: { friends : friend.friends }}
+      );
+      if(infoFriend.modifiedCount === 0){
+        throw new Error('Cannot update User');
+      }
+    
+    return {friendInserted: true}
+
+}
+
+const getAllFriends = async (userId) => {
+    helper.checkObjectId(userId);
+    userId = userId.trim();
+
+    const user = await getUserDetails(userId);
+    return user.friends
+}
+
+const removeFriendFromUser = async (userId,friendId) => {
+    helper.checkObjectId(userId);
+    helper.checkObjectId(friendId);
+
+    userId = userId.trim();
+    friendId = friendId.trim();
+
+    const user = getUserDetails(userId);
+    const friend = getUserDetails(friendId);
+    if(!user.friends.includes(friendId) || !friend.friends.includes(userId)){
+        throw 'Friend not present in User'
+    }
+
+    user.friends = user.friends.filter(userIds => userIds != friendId);
+    friend.friends = friend.friends.filter(userIds => userIds != userId);
+
+    const userCollection = await users();
+    const infoUser = await userCollection.updateOne(
+        {_id: ObjectId(userId)},
+        { $set: { friends : user.friends }}
+      );
+      if(infoUser.modifiedCount === 0){
+        throw new Error('Cannot update User');
+      } 
+    const infoFriend = await userCollection.updateOne(
+        {_id: ObjectId(userId)},
+        { $set: { friends : friend.friends }}
+      );
+      if(infoFriend.modifiedCount === 0){
+        throw new Error('Cannot update User');
+      }
+
+    return {friendRemoved: true}
+}
+
 module.exports = {
     createUser,
     checkUser,
@@ -270,5 +345,8 @@ module.exports = {
     deleteGroupFromUser,
     deleteUser,
     addTransactionToUser,
-    deleteTransactionOfUser
+    deleteTransactionOfUser,
+    addFriendToUser,
+    getAllFriends,
+    removeFriendFromUser
 }
