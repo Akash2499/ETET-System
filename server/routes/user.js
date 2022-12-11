@@ -59,6 +59,46 @@ router
       return res.status(400).send({ Error: e });
     }
   })
+  
+  .route('/:userId')
+  .get(async (req, res) => {
+    try {
+      let userId = req.params.userId;
+      helper.checkObjectId(userId)
+      let userObj = await userData.getUserDetails(userId)
+      return res.status(200).send({ userObj : userObj })
+    } catch (e) {
+      return res.status(400).send({ Error: e });
+    }
+  })
+  .put(async (req, res) => {
+    try{
+    let userId = req.params.userId;
+    let firstName = req.body.firstName
+    let lastName = req.body.lastName 
+    let dateOfBirth = req.body.dateOfBirth
+    let budget = req.body.budget
+
+    helper.checkObjectId(userId)
+    helper.checkFnameLname(firstName);
+    helper.checkFnameLname(lastName);
+    helper.checkDOB(dateOfBirth);
+    helper.checkEmail(email);
+    helper.checkBudget(budget);
+
+    let response = await userData.updateUser(
+      userId,
+      firstName,
+      lastName,
+      dateOfBirth,
+      budget
+    )
+    return res.status(200).send({ updated : true })
+  }
+  catch (e) {
+    return res.status(400).send({ Error: e });
+  }
+  })
 
 
 module.exports = router;
