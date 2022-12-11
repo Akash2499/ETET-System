@@ -112,5 +112,6 @@ module.exports = {
     updateGroup,
     deleteGroup,
     getAllGroups,
-    getGroupsByUser
+    getGroupsByUser,
+    getGroupById
 }

@@ -2,105 +2,75 @@ const express = require('express');
 const router = express.Router();
 const helper = require('../helper');
 const data = require('../data');
-const userData = data.users;    
+const groupData = data.groups;    
 
 router
-  .route('/')
+  .route('/:groupId')
   .get(async (req, res) => {
-    if(req.session.user){
-      return res.redirect('/dashboard')
+    try {
+      let groupId = req.params.groupId
+      helper.checkObjectId(groupId)
+      let gorupObj = await groupData.getGroupById(groupId)
+      return res.status(200).send({ gorupObj : gorupObj })
+    } catch (e) {
+      return res.status(400).send({ Error: e });
     }
-    else{
-      return res.render('login',{}) 
+  })
+  .delete(async (req, res) => {
+    try {
+        let groupId = req.params.groupId;
+        helper.checkObjectId(groupId)
+        let response = await groupData.deleteGroup(groupId)
+        if(response.deleted)
+            return res.status(200).send({ deleted : true })
+        return res.status(400).send({ deleted : false })
+      } catch (e) {
+        return res.status(400).send({ Error: e });
+      }
+  })
+  .put(async (req,res) => {
+    try{
+      let groupId = req.params.groupId;
+      let members = req.body.members;
+      let groupName = req.body.name;
+      let transactions = [];
+
+      let response = await groupData.updateGroup(groupId,members,groupName,transactions);
+      if(response.inserted)
+        return res.status(200).send({ inserted : true })
+    }catch (e) {
+        return res.status(400).send({ Error: e });
     }
   })
 
+
 router
-  .route('/login')
+  .route('/creategroup')
   .post(async (req,res) => {
     try{
-        helper.checkEmail(req.body.email);
-        helper.checkPassword(req.body.password);
-        req.session.user = {email: 'abc@gmail.com'}
+      let members = req.body.members;
+      let groupName = req.body.name;
+      let transactions = [];
 
-        // Code to check if username and pasword match (if not throw error)
+      let response = await groupData.createGroup(members,groupName,transactions);
+      if(response.inserted)
+        return res.status(200).send({ inserted : true })
+    }catch (e) {
+        return res.status(400).send({ Error: e });
+    }
+  })
 
-        return res.redirect('/dashboard')
-    }
-    catch(e){
-        return res.status(400).render('login',{error : e.toString()})
-    }
-  }) 
 
 router
-  .route('/register')
+  .route('/:userId')
   .get(async (req,res) => {
-    if(req.session.user){
-        return res.redirect('/dashboard')
-    }
-    else{
-        return res.render('register')
-    }
-  })
-  .post(async (req,res) => {
-    try{
-        helper.checkEmail(req.body.email);
-        helper.checkPassword(req.body.password);
-        req.session.user = {email: 'abc@gmail.com'}
-
-        // Code to insert user into the system
-
-        return res.redirect('/dashboard')
-    }
-    catch(e){
-        return res.status(400).render('login',{error : e.toString()})
-    }
-  })
-
-router
-  .route('/dashboard')
-  .get(async (req,res) => {
-    if(req.session.user){
-        return res.render('dashboard',{userData: req.session.user, login: true})
-    }
-    else{
-        return res.redirect('/')
-    }
-  })
-
-router
-  .route('/logout')
-  .get(async (req,res) => {
-    req.session.destroy();
-    return res.render('logout')
-  })
-
-router
-  .route('/group/:groupId')
-  .get(async (req,res) => {
-    if(!req.session.user){
-      return res.redirect('/')
-    }
-    let groupId = req.params.groupId;
-    try{
-      //check if groupid is valid 
-      //also check if the user is present in that group
-      //if valid store group details onto groupDetails variable
-      let groupDetails = {};
-      return res.render('group',{groupId : groupId, groupDetails : groupDetails, login: true})
-    }
-    catch(e){
-      return res.render('404error',{message: '404: Group not Found'})
-    }
-  })
-  .post(async (req,res) => {
-    try{
-      //check if the group details are correct 
-      //create the group and update the userDetails in the cookie
-      return res.redirect(`/group/${req.params.groupId}`)
-    }
-    catch(e){
-      return res.render('createGroup')
+    try {
+      let userId = req.params.userId;
+      helper.checkObjectId(userId)
+      let gorupObj = await groupData.getGroupsByUser(userId)
+      return res.status(200).send({ gorupObj : gorupObj })
+    } catch (e) {
+      return res.status(400).send({ Error: e });
     }
   })
 
