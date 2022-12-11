@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const helper = require('../helper');
 const data = require('../data');
-const { response } = require('express');
 const userData = data.users;    
 
 
