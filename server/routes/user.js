@@ -66,6 +66,7 @@ router
     try {
       let userId = req.params.userId;
       helper.checkObjectId(userId)
+      console.log(userData);
       let userObj = await userData.getUserDetails(userId)
       return res.status(200).send({ userObj : userObj })
     } catch (e) {
@@ -84,7 +85,6 @@ router
     helper.checkFnameLname(firstName);
     helper.checkFnameLname(lastName);
     helper.checkDOB(dateOfBirth);
-    helper.checkEmail(email);
     helper.checkBudget(budget);
 
     let response = await userData.updateUser(

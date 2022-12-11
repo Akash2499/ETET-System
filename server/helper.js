@@ -6,9 +6,9 @@ function checkEmail(email){
     //code for function checkUsername
     //Basic regex that covers all the tests more option available
     
-    let regex = /^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/;
+    let regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     if(regex.test(email) == false){
-        throw 'Invalid Username';
+        throw 'Invalid Email';
     }
 }
 
@@ -104,7 +104,7 @@ function checkBudget(value){
         throw 'Invalid Budget';
     }
     
-    if(/^([0-9]{1,})$/.test(value) && (Number.isInteger(Number(value)) && Number(value) > 0 )){
+    if(/^([0-9]{1,}(.[0]*)?)$/.test(value) && (Number.isInteger(Number(value)) && Number(value) > 0 )){
         return true;
     }
     throw 'Invalid Budget';
@@ -116,10 +116,10 @@ function checkUserId(userid){
 }
 function checkAmount(amount){
     if(typeof(amount) !== 'string'){
-        throw 'Invalid Budget';
+        throw 'Invalid Amount';
     }
     if(amount.length == 0){
-        throw 'Invalid Budget';
+        throw 'Invalid Amount';
     }
     if(/^([0-9]{1,}.{0,1}[0-9]{0,})$/.test(amount)  && Number(amount) > 0){
         return true;
@@ -139,8 +139,8 @@ function checkGroupName(name){
 }
 function checkObjectId(id){
     id = id.trim();
-    if(!ObjectID.isValid(id)){
-        throw new Error("Invalid id");
+    if(!ObjectId.isValid(id)){
+        throw "Invalid id";
       }
 }
 
