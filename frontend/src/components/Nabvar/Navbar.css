@@ -1,3 +1,13 @@
 .set-span-nav{
     margin-left: 1em;
 }
+
+.navbar-link{
+    text-decoration: none;
+    color: white;
+}
+
+.navbar-link:hover{
+    text-decoration: none;
+    color: white;
+}
