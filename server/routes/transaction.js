@@ -41,8 +41,8 @@ router
         let name = req.body.name
         let category = req.body.category
         let paidBy = req.body.paidBy
+        let amount = req.body.amount
         let groupId = req.body.groupId
-        let description = req.body.description
         let comments = req.body.comments
 
         let response = await transactionData.addTransaction(
@@ -50,13 +50,14 @@ router
             name,
             category,
             paidBy,
+            amount,
             groupId,
-            description,
             comments
         )
         if(response.inserted)
             return res.status(200).send({ inserted : true })
       } catch (e) {
+        console.log(e);
         return res.status(400).send({ Error: e });
       }
   })
@@ -71,7 +72,6 @@ router
         let category = req.body.category
         let paidBy = req.body.paidBy
         let groupId = req.body.groupId
-        let description = req.body.description
         let comments = req.body.comments
 
         let response = await transactionData.updateTransaction(
@@ -81,7 +81,6 @@ router
             category,
             paidBy,
             groupId,
-            description,
             comments
         )
         if(response.modified)

@@ -3,16 +3,19 @@ const transactions = mongoCollections.transactions;
 const helper = require('../helper');
 const bcryptjs = require('bcryptjs');
 const saltRounds = 16;
-const {ObjectId} = require('mongodb')
-const user = require('./user') 
+const {ObjectId} = require('mongodb');
+const user = require('./user');
+const group = require('./group')
 
 const addTransaction = async (
     userIds,
     name,
     category,
     paidBy,
+    amount,
     groupId,
-    comments
+    comments,
+    transactionData
 ) => {
 
     helper.checkUserId(userIds)
@@ -22,11 +25,13 @@ const addTransaction = async (
     })
     helper.checkString(name)
     helper.checkObjectId(paidBy)
+    helper.checkAmount(amount)
+    
     
     name = name.trim()
     category = category.trim()
     paidBy = paidBy.trim()
-    let transactionDate = helper.getTodaysDate()
+    let transactionDate = transactionData || helper.getTodaysDate()
 
     const transactionCollection = await transactions()
     const insertInfo = await transactionCollection.insertOne({
@@ -34,6 +39,7 @@ const addTransaction = async (
         name,
         category,
         paidBy,
+        amount,
         groupId,
         comments,
         transactionDate
@@ -41,9 +47,10 @@ const addTransaction = async (
     
     if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Error while adding transaction'
 
-    await user.addTransactionToUser(paidBy)
+    console.log(user,"=====",group)
+    await user.addTransactionToUser(paidBy, insertInfo.insertedId.toString())
     userIds.map(async (userId)=>{
-        await user.addCommentToTransaction(userId)
+        await user.addTransactionToUser(userId, insertInfo.insertedId.toString())
     })
 
     return { inserted : true };

@@ -133,6 +133,7 @@ async function updateUser(
         budget: budget
     }
 
+    const userCollection = await users();
     const info = await userCollection.updateOne(
         {_id: ObjectId(userId)},
         {$set: updatedUser}
@@ -147,12 +148,11 @@ async function updateUser(
 async function getUserDetails(userId){
     //function to get user details
     helper.checkObjectId(userId);
-
     userId = userId.trim();
     const userCollection = await users();
     const userPresent = await userCollection.findOne({_id: ObjectId(userId)});
     if(userPresent === null){
-    throw 'Either the email or password is invalid'
+    throw 'No user found!'
     }
     userPresent._id = userPresent._id.toString();
     return userPresent
@@ -177,18 +177,15 @@ async function findUserByName(name){
 
 }
 
-async function addTransactionToUser(userId,transactionId){
+const addTransactionToUser = async (userId, transactionId) => {
     helper.checkObjectId(userId);
     helper.checkObjectId(transactionId);
     let currentUser = await getUserDetails(userId);
     currentUser.transactions.push(ObjectId(transactionId))
-    const updatedUser = {
-        transactions: currentUser.transactions
-    }
 
     const info = await userCollection.updateOne(
         {_id: ObjectId(userId)},
-        {$set: updatedUser}
+        currentUser
       );
       if(info.modifiedCount === 0){
         throw new Error('Cannot update User');
