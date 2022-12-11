@@ -51,5 +51,5 @@ configRoutes(app);
 
 app.listen(5000, () => {
   console.log("We've now got a server!");
-  console.log('Application will be running on http://localhost:5000');
+  console.log('Server will be running on http://localhost:5000');
 });

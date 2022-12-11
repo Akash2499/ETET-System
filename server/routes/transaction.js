@@ -17,20 +17,6 @@ router
     }
   })
 
-router
-  .route('/:transactionId')
-  .delete(async (req, res) => {
-    try {
-        let transactionId = req.params.transactionId
-        helper.checkObjectId(transactionId)
-        let response = await transactionData.deleteTransaction(transactionId)
-        if(response.deleted)
-            return res.status(200).send({ deleted : true })
-        return res.status(400).send({ deleted : false })
-      } catch (e) {
-        return res.status(400).send({ Error: e });
-      }
-  })
 
 router
   .route('/:transactionId')

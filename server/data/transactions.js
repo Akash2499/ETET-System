@@ -12,7 +12,6 @@ const addTransaction = async (
     category,
     paidBy,
     groupId,
-    description,
     comments
 ) => {
 
@@ -23,12 +22,10 @@ const addTransaction = async (
     })
     helper.checkString(name)
     helper.checkObjectId(paidBy)
-    helper.checkString(description)
     
     name = name.trim()
     category = category.trim()
     paidBy = paidBy.trim()
-    description = description.trim()
     let transactionDate = helper.getTodaysDate()
 
     const transactionCollection = await transactions()
@@ -38,7 +35,6 @@ const addTransaction = async (
         category,
         paidBy,
         groupId,
-        description,
         comments,
         transactionDate
     });
@@ -124,7 +120,6 @@ const updateTransaction = async (
     category,
     paidBy,
     groupId,
-    description,
     comments
 ) => {
 
@@ -136,14 +131,12 @@ const updateTransaction = async (
     })
     helper.checkString(name);
     helper.checkObjectId(paidBy);
-    helper.checkString(description);
 
     transactionId = transactionId.trim()
     name = name.trim()
     category = category.trim()
     paidBy = paidBy.trim()
     groupId = groupId.trim()
-    description = description.trim()
 
     const transactionCollection = await transactions();
     let transactionObj = await getTransactionById(transactionId)
@@ -153,7 +146,6 @@ const updateTransaction = async (
     transactionObj.category = category
     transactionObj.paidBy = paidBy
     transactionObj.groupId = groupId
-    transactionObj.description = description
     transactionObj.comments = comments
 
     const updatedInfo = await transactionCollection.replaceOne(
