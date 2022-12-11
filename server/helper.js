@@ -34,7 +34,7 @@ function checkPassword(password){
 }
 
 function checkFnameLname(name){
-    let regex =/^[a-zA-Z]{2}$/
+    let regex =/^[a-zA-Z]{2,}$/
     if(regex.test(name) == false){
         throw 'Enter a valid name';
     }
