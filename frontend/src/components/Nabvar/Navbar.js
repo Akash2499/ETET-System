@@ -5,7 +5,7 @@ import './Navbar.css';
 function Navbar(props) {
 	return (
 		<nav class="navbar navbar-dark bg-dark">
-            <span class="navbar-brand h1 set-span-nav">ETET</span>
+            <span className="navbar-brand h1 set-span-nav"><a href="/" className="navbar-link">ETET</a></span>
         </nav>
 	);
 }

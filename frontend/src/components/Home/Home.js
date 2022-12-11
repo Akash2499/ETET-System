@@ -20,6 +20,17 @@ class Home extends React.Component {
 
   login = (event) => {
     event.preventDefault()
+    window.location.href = "/my-activities"
+  }
+
+  addTransaction = (event) => {
+    event.preventDefault()
+    window.location.href = "/add-transaction"
+  }
+
+  addGroup = (event) => {
+    event.preventDefault()
+    window.location.href = "/add-group"
   }
 
   display = () => {
@@ -50,6 +61,15 @@ class Home extends React.Component {
               </form>
               <span className="login-span"> <a href="/register"> Don't have an account ? Register here </a></span>
             </div>
+        </div>
+        <hr></hr>
+        <div className="row add-style">
+          <div className="col-md-6">
+            <button className="btn btn-info" onClick={this.addTransaction}>Add Transaction</button>
+          </div>
+          <div className="col-md-6">
+            <button className="btn btn-info" onClick={this.addGroup}>Add Group</button>
+          </div>
         </div>
       </React.Fragment>
     )
