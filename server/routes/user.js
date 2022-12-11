@@ -60,6 +60,7 @@ router
     }
   })
   
+router
   .route('/:userId')
   .get(async (req, res) => {
     try {
@@ -96,7 +97,7 @@ router
     return res.status(200).send({ updated : true })
   }
   catch (e) {
-    return res.status(400).send({ Error: e });
+    return res.status(400).send({ Error: e.toString() });
   }
   })
 
