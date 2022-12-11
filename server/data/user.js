@@ -2,12 +2,10 @@ const mongoCollections = require('../config/mongoCollections');
 const users = mongoCollections.users;
 const helper = require('../helper');
 const bcryptjs = require('bcryptjs');
-const {ObjectId} = require('mongodb')
 const saltRounds = 16;
-const transactions = require('./transactions')
+const {ObjectId} = require('mongodb');
 
-
-async function getAllUsers(){
+const getAllUsers = async () => {
     const userCollection = await users();
     const users = await userCollection.find({}).toArray();
     if (!users){
@@ -17,14 +15,14 @@ async function getAllUsers(){
 }
 
 
-async function createUser(
+const createUser = async ( 
     firstName,
     lastName,
     dateOfBirth,
     email,
     password,
     budget
-){
+) => {
     //will create a user into the database
     //inputchecking should be done 
     helper.checkFnameLname(firstName);
@@ -62,7 +60,7 @@ async function createUser(
     return await getUserDetails(insertUser.insertedId.toString())
 }
 
-async function checkUser(email,password){
+const checkUser = async (email,password) =>{
     //check is user exists in the database
     //input validation here
     helper.checkEmail(email);
@@ -84,7 +82,7 @@ async function checkUser(email,password){
     throw 'Either the email or password is invalid'
 }
 
-async function deleteGroupFromUser(userId,groupId){
+const deleteGroupFromUser = async (userId,groupId) =>{
 
     helper.checkObjectId(userId);
     helper.checkObjectId(groupId);
@@ -111,13 +109,13 @@ async function deleteGroupFromUser(userId,groupId){
 }
 
 
-async function updateUser(
+const updateUser = async (
     userId,
     firstName,
     lastName,
     dateOfBirth,
     budget
-){
+) => {
     helper.checkObjectId(userId);
     helper.checkFnameLname(firstName);
     helper.checkFnameLname(lastName);
@@ -143,7 +141,7 @@ async function updateUser(
 }
 
 
-async function getUserDetails(userId){
+const getUserDetails = async (userId) => {
     //function to get user details
     helper.checkObjectId(userId);
     userId = userId.trim();
@@ -156,7 +154,7 @@ async function getUserDetails(userId){
     return userPresent
 }
 
-async function findUserByName(name){
+const findUserByName = async (name) => {
     //returns list of users
     helper.checkString(name);
     name = name.trim().toLowerCase();
@@ -181,9 +179,10 @@ const addTransactionToUser = async (userId, transactionId) => {
     let currentUser = await getUserDetails(userId);
     currentUser.transactions.push(ObjectId(transactionId))
 
+    const userCollection = await users();
     const info = await userCollection.updateOne(
         {_id: ObjectId(userId)},
-        currentUser
+        { $set: { transactions : currentUser.transactions }}
       );
       if(info.modifiedCount === 0){
         throw new Error('Cannot update User');
@@ -191,7 +190,7 @@ const addTransactionToUser = async (userId, transactionId) => {
     return await getUserDetails(userId)
 }
 
-async function deleteTransactionOfUser(userId,transactionId){
+const deleteTransactionOfUser = async (userId,transactionId) =>{
     helper.checkObjectId(userId);
     helper.checkObjectId(transactionId);
     let currentUser = await getUserDetails(userId);
@@ -215,7 +214,7 @@ async function deleteTransactionOfUser(userId,transactionId){
     return await getUserDetails(userId)
 }
 
-async function deleteUser(userId){
+const deleteUser = async (userId) => {
 
     helper.checkObjectId(userId);
     const userCollection = await users();
