@@ -4,6 +4,8 @@ const helper = require('../helper');
 const bcryptjs = require('bcryptjs');
 const saltRounds = 16;
 const {ObjectId} = require('mongodb');
+const data = require('../data');
+const userData = data.users;    
 const user = require('./user');
 const group = require('./group')
 
@@ -47,7 +49,7 @@ const addTransaction = async (
     
     if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Error while adding transaction'
 
-    console.log(user,"=====",group)
+    console.log(user,"=====",group,userData)
     await user.addTransactionToUser(paidBy, insertInfo.insertedId.toString())
     userIds.map(async (userId)=>{
         await user.addTransactionToUser(userId, insertInfo.insertedId.toString())

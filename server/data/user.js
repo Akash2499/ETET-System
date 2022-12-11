@@ -1,5 +1,3 @@
-// functions to get data from database
-
 const mongoCollections = require('../config/mongoCollections');
 const users = mongoCollections.users;
 const helper = require('../helper');
