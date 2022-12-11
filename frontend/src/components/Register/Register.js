@@ -1,7 +1,7 @@
 import React from "react";
-import './Home.css'
+import './Register.css'
 
-class Home extends React.Component {
+class Register extends React.Component {
 
   constructor() {
     super();
@@ -25,18 +25,9 @@ class Home extends React.Component {
   display = () => {
     return (
       <React.Fragment>
-        <div className="row">
-          <div className="col-md-6">
-              <div className="jumbotron jumbotron-fluid">
-                <div className="container">
-                  <h1 className="display-4">Fluid jumbotron</h1>
-                  <p className="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
-                </div>
-              </div>
-            </div>
-              <div className="col-md-6">
-              <form>
-                <h1 className="login-form-h1">Login</h1>
+        <div className="col-md-12">
+            <form>
+                <h1 className="login-form-h1">Register</h1>
                 <div className="form-group">
                   <label for="useremail">Email address</label>
                   <input type="email" className="form-control" id="useremail" aria-describedby="emailHelp" placeholder="Enter email" onChange={this.handleInput} value={this.state.useremail}/>
@@ -46,10 +37,9 @@ class Home extends React.Component {
                   <label for="password">Password</label>
                   <input type="password" className="form-control" id="password" placeholder="Password" onChange={this.handleInput} value={this.state.password}/>
                 </div>
-                <button type="submit" className="btn btn-primary" onClick={this.login}>Login</button>
-              </form>
-              <span className="login-span"> <a href="/register"> Don't have an account ? Register here </a></span>
-            </div>
+                <button type="submit" className="btn btn-primary" onClick={this.login}>Register</button>
+            </form>
+            <span className=""> <a href="/register"> Don't have an account ? Register here </a></span>
         </div>
       </React.Fragment>
     )
@@ -60,4 +50,4 @@ class Home extends React.Component {
   }
 }
 
-export default Home;
+export default Register;
