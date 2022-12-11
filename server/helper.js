@@ -1,5 +1,7 @@
 // Functions for server side input validation
 
+const {ObjectId} = require('mongodb');
+
 function checkEmail(email){
     //code for function checkUsername
     //Basic regex that covers all the tests more option available
@@ -137,7 +139,7 @@ function checkGroupName(name){
 }
 function checkObjectId(id){
     id = id.trim();
-    if(!ObjectId.isValid(id)){
+    if(!ObjectID.isValid(id)){
         throw new Error("Invalid id");
       }
 }
