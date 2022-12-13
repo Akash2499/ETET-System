@@ -101,6 +101,50 @@ router
   }
   })
 
+  router
+  .route('/:userId/transactionByMonth')
+  .get(async (req, res) => {
+    try {
+      let userId = req.params.userId;
+      let month = req.body.month;
+      helper.checkObjectId(userId);
+      let userObj = await userData.getUserTransactionsByCategory(userId,month);
+      return res.status(200).send({ TransactionsByMonth : userObj })
+
+    } catch (e) {
+      return res.status(400).send({ Error: e.toString() });
+    }
+  })
+  router
+  .route('/:userId/transactionByCategory')
+  .get(async (req, res) => {
+    try {
+      let userId = req.params.userId;
+      let category = req.body.category;
+      helper.checkObjectId(userId);
+      let userObj = await userData.getUserTransactionsByCategory(userId,category);
+      return res.status(200).send({ TransactionsByCategory : userObj })
+
+    } catch (e) {
+      return res.status(400).send({ Error: e.toString() });
+    }
+  })
+  router
+  .route('/searchname')
+  .get(async (req, res) => {
+    try {
+      let name = req.body.name;
+      helper.checkString(name);
+      let userObj = await userData.findUserByName(name);
+      return res.status(200).send({ findUserByName : userObj })
+
+    } catch (e) {
+      return res.status(400).send({ Error: e.toString() });
+    }
+  })
+  
+
+
 
 
 module.exports = router;
