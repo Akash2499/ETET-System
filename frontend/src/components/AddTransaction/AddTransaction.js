@@ -1,16 +1,16 @@
 import React from "react";
-import './Transaction.css'
+import './AddTransaction.css'
 
-class Transaction extends React.Component {
+class AddTransaction extends React.Component {
 
   constructor() {
     super();
     this.state = { 
-        name ="",
-        category ="",
-        paidBy ="",
-        groupId ="",
-        comments =""
+        name : "",
+        category : "",
+        paidBy : "",
+        groupId : "",
+        comments : ""
     };
   }
 
@@ -64,4 +64,4 @@ class Transaction extends React.Component {
   }
 }
 
-export default Transaction;
+export default AddTransaction;

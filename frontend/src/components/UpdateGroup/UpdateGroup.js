@@ -1,14 +1,14 @@
 import React from "react";
-import './Group.css'
+import './UpdateGroup.css'
 
 class UpdateGroup extends React.Component {
 
   constructor() {
     super();
     this.state = { 
-        members ="",
-        name ="",
-        transactions =""
+        members : "",
+        name : "",
+        transactions : ""
     };
   }
 

@@ -1,9 +1,11 @@
 const express = require('express');
+var cors = require('cors')
 const app = express();
 const session = require('express-session');
 const configRoutes = require('./routes');
 const exphbs = require('express-handlebars');
 
+app.use(cors())
 app.use(express.json());
 // app.use(express.urlencoded({extended: true}));
 // app.engine('handlebars', exphbs.engine({defaultLayout: 'main'}));
@@ -49,7 +51,7 @@ app.use(express.json());
 
 configRoutes(app);
 
-app.listen(5000, () => {
+app.listen(4000, () => {
   console.log("We've now got a server!");
-  console.log('Server will be running on http://localhost:5000');
+  console.log('Server will be running on http://localhost:4000');
 });
