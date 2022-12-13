@@ -5,8 +5,7 @@ const {ObjectId} = require('mongodb');
 function checkEmail(email){
     //code for function checkUsername
     //Basic regex that covers all the tests more option available
-    
-    let regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
     if(regex.test(email) == false){
         throw 'Invalid Email';
     }
@@ -97,10 +96,7 @@ function checkDOB(date){
     }
 }
 function checkBudget(value){
-    if(typeof(value) !== 'string'){
-        throw 'Invalid Budget';
-    }
-    if(value.length == 0){
+    if(typeof(value) !== 'number'){
         throw 'Invalid Budget';
     }
     

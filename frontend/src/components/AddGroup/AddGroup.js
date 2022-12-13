@@ -1,14 +1,14 @@
 import React from "react";
-import './Group.css'
+import './AddGroup.css'
 
-class Group extends React.Component {
+class AddGroup extends React.Component {
 
   constructor() {
     super();
     this.state = { 
-        members ="",
-        name ="",
-        transactions =""
+        members : "",
+        name : "",
+        transactions : ""
     };
   }
 
@@ -54,4 +54,4 @@ class Group extends React.Component {
   }
 }
 
-export default Group;
+export default AddGroup;

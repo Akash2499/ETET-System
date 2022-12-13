@@ -11,7 +11,7 @@ router
 
     try {
 
-      let email = req.body.email
+      let email = req.body.useremail
       let password = req.body.password 
 
       helper.checkEmail(email)
