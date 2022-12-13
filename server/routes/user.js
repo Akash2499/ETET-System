@@ -3,6 +3,7 @@ const router = express.Router();
 const helper = require('../helper');
 const data = require('../data');
 const userData = data.users;    
+const groupData = data.groups;  
 
 
 router
@@ -99,6 +100,7 @@ router
     return res.status(400).send({ Error: e.toString() });
   }
   })
+
 
 
 module.exports = router;
