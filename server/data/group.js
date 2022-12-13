@@ -15,7 +15,7 @@ const createGroup = async (
     helper.checkGroupTransactions(transactions)
 
     name = name.trim()
-    members = members.map((m)=>m.trim())
+    members = members.map((m)=>ObjectId(m.trim()))
     transactions = transactions.map((t)=>t.trim())
 
     const groupCollection = await groups()
@@ -26,7 +26,7 @@ const createGroup = async (
     });
     
     if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Error while adding group'
-    return { inserted : true };
+    return await getGroupById(insertInfo.insertedId.toString());
 }
 
 const updateGroup = async (

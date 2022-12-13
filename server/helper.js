@@ -138,6 +138,7 @@ function checkGroupName(name){
     }
 }
 function checkObjectId(id){
+    id = id.toString();
     id = id.trim();
     if(!ObjectId.isValid(id)){
         throw "Invalid id";
@@ -165,7 +166,7 @@ const getTodaysDate = () => {
     year = today.getFullYear()
     day = day < 10 ? '0'+day : day+''
     month = month < 10 ? '0'+month : month+''
-    return day+"/"+month+"/"+year
+    return month+"/"+day+"/"+year
 }
 
 module.exports = {
