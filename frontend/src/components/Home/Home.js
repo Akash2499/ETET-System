@@ -46,7 +46,7 @@ class Home extends React.Component {
               </div>
             </div>
               <div className="col-md-6">
-              <form>
+              {/* <form>
                 <h1 className="login-form-h1">Login</h1>
                 <div className="form-group">
                   <label for="useremail">Email address</label>
@@ -59,7 +59,7 @@ class Home extends React.Component {
                 </div>
                 <button type="submit" className="btn btn-primary" onClick={this.login}>Login</button>
               </form>
-              <span className="login-span"> <a href="/register"> Don't have an account ? Register here </a></span>
+              <span className="login-span"> <a href="/register"> Don't have an account ? Register here </a></span> */}
             </div>
         </div>
         <hr></hr>

@@ -6,11 +6,11 @@ class UpdateTransaction extends React.Component {
   constructor() {
     super();
     this.state = { 
-        name ="",
-        category ="",
-        paidBy ="",
-        groupId ="",
-        comments =""
+        name : "",
+        category : "",
+        paidBy : "",
+        groupId : "",
+        comments : ""
     };
   }
 
