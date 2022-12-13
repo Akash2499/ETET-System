@@ -12,7 +12,7 @@ class PublicRoute extends React.Component {
   }
 
   componentWillMount = () => {
-    if(sessionStorage.getItem("useremail")){
+    if(sessionStorage.getItem("userId")){
         this.setState({render : false})
     } else {
         this.setState({render : true})

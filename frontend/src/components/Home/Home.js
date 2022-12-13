@@ -33,6 +33,11 @@ class Home extends React.Component {
     window.location.href = "/add-group"
   }
 
+  addFriend = (event) => {
+    event.preventDefault()
+    window.location.href = "/add-friend"
+  }
+
   display = () => {
     return (
       <React.Fragment>
@@ -64,10 +69,13 @@ class Home extends React.Component {
         </div>
         <hr></hr>
         <div className="row add-style">
-          <div className="col-md-6">
+          <div className="col-md-4">
+            <button className="btn btn-info" onClick={this.addFriend}>Add Friend</button>
+          </div>
+          <div className="col-md-4">
             <button className="btn btn-info" onClick={this.addTransaction}>Add Transaction</button>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-4">
             <button className="btn btn-info" onClick={this.addGroup}>Add Group</button>
           </div>
         </div>

@@ -14,6 +14,7 @@ import UpdateTransaction from './components/UpdateTransaction/UpdateTransaction'
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import Login from './components/Login/Login';
 import PublicRoute from './components/PublicRoute/PublicRoute';
+import AddFriend from './components/AddFriend/AddFriend';
 
 function App() {
   return (
@@ -51,6 +52,10 @@ function App() {
 
           <Routing exact path="/update-group" element={<PrivateRoute/>}>
             <Routing exact path="/update-group" element={<UpdateGroup/>} />
+          </Routing>
+
+          <Routing exact path="/add-friend" element={<PrivateRoute/>}>
+            <Routing exact path="/add-friend" element={<AddFriend/>} />
           </Routing>
         
         </Switch>
