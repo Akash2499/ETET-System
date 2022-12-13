@@ -162,7 +162,7 @@ function checkGroupTransactions(transactions){
 const getTodaysDate = () => {
     today = new Date()
     day = today.getDate()
-    month = today.getMonth()
+    month = today.getMonth() + 1
     year = today.getFullYear()
     day = day < 10 ? '0'+day : day+''
     month = month < 10 ? '0'+month : month+''

@@ -28,7 +28,8 @@ const addTransaction = async (
     helper.checkString(name)
     helper.checkObjectId(paidBy)
     helper.checkAmount(amount)
-    
+
+    helper.checkTransactionDate(transactionDate)
     
     name = name.trim()
     category = category.trim()
@@ -51,14 +52,14 @@ const addTransaction = async (
 
     //await user.addTransactionToUser(paidBy, insertInfo.insertedId.toString())
     userIds.map(async (userId)=>{
-        await user.addTransactionToUser(userId, insertInfo.insertedId.toString())
+        await user.addTransactionToUser(userId.toString(), insertInfo.insertedId.toString())
     })
 
     return { inserted : true };
 }
 
 const addCommentToTransaction = async (transactionId, comment) => {
-
+    transactionId = transactionId.toString().trim()
     helper.checkObjectId(transactionId)
     let transactionObj = await getTransactionById(transactionId)
     transactionObj.comments.push({
