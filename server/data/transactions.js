@@ -17,13 +17,13 @@ const addTransaction = async (
     amount,
     groupId,
     comments,
-    transactionData
+    transactionDate
 ) => {
 
-    helper.checkUserId(userIds)
+    //helper.checkUserId(userIds)
     userIds = userIds.map((uid)=>{
         helper.checkObjectId(uid)
-        return uid.trim()
+        return ObjectId(uid.trim())
     })
     helper.checkString(name)
     helper.checkObjectId(paidBy)
@@ -32,8 +32,8 @@ const addTransaction = async (
     
     name = name.trim()
     category = category.trim()
-    paidBy = paidBy.trim()
-    let transactionDate = transactionData || helper.getTodaysDate()
+    paidBy = ObjectId(paidBy.trim())
+    transactionDate = transactionDate || helper.getTodaysDate()
 
     const transactionCollection = await transactions()
     const insertInfo = await transactionCollection.insertOne({

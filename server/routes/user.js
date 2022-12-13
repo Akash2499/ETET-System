@@ -65,7 +65,6 @@ router
     try {
       let userId = req.params.userId;
       helper.checkObjectId(userId)
-      console.log(userData);
       let userObj = await userData.getUserDetails(userId)
       return res.status(200).send({ userObj : userObj })
     } catch (e) {
@@ -74,11 +73,11 @@ router
   })
   .put(async (req, res) => {
     try{
-    let userId = req.params.userId;
-    let firstName = req.body.firstName
-    let lastName = req.body.lastName 
-    let dateOfBirth = req.body.dateOfBirth
-    let budget = req.body.budget
+    let userId = req.params.userId.trim();
+    let firstName = req.body.firstName.trim();
+    let lastName = req.body.lastName.trim();
+    let dateOfBirth = req.body.dateOfBirth.trim();
+    let budget = req.body.budget.trim();
 
     helper.checkObjectId(userId)
     helper.checkFnameLname(firstName);
@@ -99,6 +98,43 @@ router
     return res.status(400).send({ Error: e.toString() });
   }
   })
+
+router
+  .route('/:userId/friends')
+  .get(async (req,res) => {
+    try {
+      let userId = req.params.userId;
+      helper.checkObjectId(userId)
+      let friends = await userData.getAllFriends(userId)
+      return res.status(200).send({ friends : friends })
+    } catch (e) {
+      return res.status(400).send({ Error: e });
+    }
+  })
+  .post(async (req,res) => {
+    try{
+      let userId = req.params.userId.trim();
+      let friendId = req.body.friendId
+
+      helper.checkObjectId(userId);
+      helper.checkObjectId(friendId);
+
+      let user = await userData.getUserDetails(userId);
+      let friend  = await userData.getUserDetails(friendId);
+
+      if(user.friends.includes(friendId) || friend.friends.includes(userId)){
+        throw 'Friend allready exists!'
+      }
+
+      let response = await userData.addFriendToUser(userId,friendId);
+      return res.status(200).send({ friendAdded : true })
+      
+    }
+    catch(e){
+      return res.status(400).send({ Error: e.toString() });
+    }
+  })
+
 
 
 module.exports = router;
