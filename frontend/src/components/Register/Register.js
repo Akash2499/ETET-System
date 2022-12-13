@@ -55,7 +55,7 @@ class Register extends React.Component {
     await axios.post(url, this.state.body)
     .then((data)=> {
       if(data.data.registered){
-        this.setState({error : "", loading: true})
+        this.setState({error : "", loading: false})
         window.location.href = '/login'
       } else {
         this.setState({loading : false , error : "Internal Server Error"})

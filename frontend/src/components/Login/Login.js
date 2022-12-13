@@ -31,9 +31,9 @@ class Login extends React.Component {
     let url = this.backEndURL + "/users/validate"
     await axios.post(url, this.state.body)
     .then((data)=> {
-      if(data.data.authenticatedUser){
-        this.setState({error : "", loading: true})
-        sessionStorage.setItem("useremail", this.state.body.useremail)
+      if(data.data.userId){
+        this.setState({error : "", loading: false})
+        sessionStorage.setItem("userId", data.data.userId)
         window.location.href = '/'
       } else {
         this.setState({loading : false , error : "Internal Server Error"})

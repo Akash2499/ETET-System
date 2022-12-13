@@ -20,9 +20,9 @@ router
 
       let response = await userData.checkUser(email, password)
       if(response.authenticatedUser) {
-        return res.status(200).send({ authenticatedUser : true })
+        return res.status(200).send({ userId : response.authenticatedUser })
       }
-      return res.status(403).send({ authenticatedUser : false })
+      return res.status(403).send({ userId : null })
     } catch (e) {
       return res.status(400).send({ Error: e });
     }
@@ -165,7 +165,7 @@ router
   })
   router
   .route('/searchname')
-  .get(async (req, res) => {
+  .post(async (req, res) => {
     try {
       let name = req.body.name;
       helper.checkString(name);

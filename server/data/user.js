@@ -7,11 +7,11 @@ const {ObjectId} = require('mongodb');
 
 const getAllUsers = async () => {
     const userCollection = await users();
-    const users = await userCollection.find({}).toArray();
-    if (!users){
+    const userData = await userCollection.find({}).toArray();
+    if (!userData){
     throw 'No users found!';
     }
-    return users;
+    return userData;
 }
 
 
@@ -77,7 +77,7 @@ const checkUser = async (email,password) =>{
 
     const passwordCompare = await bcryptjs.compare(password,userPresent.password);
     if(passwordCompare){
-    return {authenticatedUser: true}
+    return {authenticatedUser: userPresent._id.toString()}
     }
     throw 'Either the email or password is invalid'
 }
@@ -158,7 +158,7 @@ const findUserByName = async (name) => {
     //returns list of users
     helper.checkString(name);
     name = name.trim().toLowerCase();
-    const allUsers = await getAllUsers();
+    let allUsers = await getAllUsers();
     let searchResult = [];
     for(let i =0; i<allUsers.length;i++){
         if(allUsers[i].firstName.includes(name) || allUsers[i].lastName.includes(name)){
@@ -264,22 +264,23 @@ const addFriendToUser = async (userId,friendId) => {
     userId = userId.trim();
     friendId = friendId.trim();
 
-    let user = getUserDetails(userId);
-    let friend = getUserDetails(friendId);
+    let user = await getUserDetails(userId);
+    let friend = await getUserDetails(friendId);
+
     user.friends.push(friendId);
     friend.friends.push(userId);
 
     const userCollection = await users();
-    const infoUser = await userCollection.updateOne(
+    const infoUser = await userCollection.replaceOne(
         {_id: ObjectId(userId)},
-        { $set: { friends : user.friends }}
+        user
       );
       if(infoUser.modifiedCount === 0){
         throw new Error('Cannot update User');
       } 
-    const infoFriend = await userCollection.updateOne(
+    const infoFriend = await userCollection.replaceOne(
         {_id: ObjectId(userId)},
-        { $set: { friends : friend.friends }}
+        friend
       );
       if(infoFriend.modifiedCount === 0){
         throw new Error('Cannot update User');
