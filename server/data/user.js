@@ -142,6 +142,7 @@ const updateUser = async (
 const getUserDetails = async (userId) => {
     //function to get user details
     helper.checkObjectId(userId);
+    userId = userId.toString().trim();
     const userCollection = await users();
     const userPresent = await userCollection.findOne({_id: ObjectId(userId)});
     if(userPresent === null){
