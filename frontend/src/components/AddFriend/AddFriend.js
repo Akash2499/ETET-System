@@ -86,6 +86,25 @@ class AddFriend extends React.Component {
     this.setState({name : user.firstName+" "+user.lastName, searchList : [], selectedUser: user._id.toString()})
   }
 
+  removeFriend = async (event) => {
+    event.preventDefault()
+    let friendId = event.target.id
+    let userId = sessionStorage.getItem('userId')
+
+    let url = this.backEndURL + "/users/"+userId+"/friends/"+friendId
+    await axios.delete(url)
+    .then(async (data)=> {
+      if(data.data.friendAdded){
+        this.setState({loading: false})
+        window.location.reload()
+      }
+    })
+    .catch((error)=>{
+      let x = error.response.data.Error
+      this.setState({loading : false})
+    })
+  }
+
   display = () => {
     return (
       <React.Fragment>
@@ -100,6 +119,7 @@ class AddFriend extends React.Component {
                                 <th>First Name</th>
                                 <th>Last Name</th>
                                 <th></th>
+                                <th></th>
                             </thead>
                             <tbody>
                             {
@@ -109,6 +129,9 @@ class AddFriend extends React.Component {
                                         <td>{friend.lastName}</td>
                                         <td>
                                             <button className="btn btn-primary" id={friend._id.toString()} onClick={this.addTransaction}>Add Transaction</button>
+                                        </td>
+                                        <td>
+                                            <button className="btn btn-danger" id={friend._id.toString()} onClick={this.removeFriend}>Remove Friend</button>
                                         </td>
                                     </tr>
                                 })

@@ -7,14 +7,17 @@ const users = require('./user')
 const createGroup = async (
     members,
     name,
-    transactions
+    transactions,
+    createBy
 ) => {
 
     helper.checkGroupName(name)
     helper.checkGroupMembers(members)
     helper.checkGroupTransactions(transactions)
+    helper.checkObjectId(createBy)
 
     name = name.trim()
+    members.push(createBy)
     members = members.map((m)=>ObjectId(m.trim()))
     transactions = transactions.map((t)=>t.trim())
 
@@ -24,9 +27,13 @@ const createGroup = async (
         name,
         transactions,
     });
+
+    await members.map(async (m)=>{
+        await users.addGroupToUser(m.toString(), insertInfo.insertedId.toString())
+    })
     
     if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Error while adding group'
-    return await getGroupById(insertInfo.insertedId.toString());
+    return { inserted : true }
 }
 
 const updateGroup = async (
@@ -100,11 +107,8 @@ const getGroupById = async (groupId) => {
 const getGroupsByUser = async (userId) => {
     helper.checkObjectId(userId)
     userId = userId.trim()
-    let groupList = await getAllGroups()
-    groupList = groupList.filter((group)=>{
-        return group.members.includes(ObjectId(userId))
-    })
-    return groupList
+    let userData = await users.getUserDetails(userId)
+    return userData.groups
 }
 
 module.exports = {

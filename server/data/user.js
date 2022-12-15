@@ -94,15 +94,13 @@ const deleteGroupFromUser = async (userId,groupId) =>{
             newGroups.push(currentUser.groups[i]);
         }
     }
-    const updatedUser = {
-        groups: newGroups
-    }
-
-    const info = await userCollection.updateOne(
+    currentUser.groups = newGroups
+    const userCollection = await users();
+    const info = await userCollection.replaceOne(
         {_id: ObjectId(userId)},
-        {$set: updatedUser}
-      );
-      if(info.modifiedCount === 0){
+       currentUser
+    );
+    if(info.modifiedCount === 0){
         throw new Error('Cannot update User');
       }
     return await getUserDetails(userId)
@@ -144,13 +142,11 @@ const updateUser = async (
 const getUserDetails = async (userId) => {
     //function to get user details
     helper.checkObjectId(userId);
-    userId = userId.trim();
     const userCollection = await users();
     const userPresent = await userCollection.findOne({_id: ObjectId(userId)});
     if(userPresent === null){
     throw 'No user found!'
     }
-    userPresent._id = userPresent._id.toString();
     return userPresent
 }
 
@@ -177,12 +173,29 @@ const addTransactionToUser = async (userId, transactionId) => {
     helper.checkObjectId(userId);
     helper.checkObjectId(transactionId);
     let currentUser = await getUserDetails(userId);
-    currentUser.transactions.push(ObjectId(transactionId))
+    currentUser.transactions.push(transactionId)
 
     const userCollection = await users();
     const info = await userCollection.updateOne(
         {_id: ObjectId(userId)},
         { $set: { transactions : currentUser.transactions }}
+      );
+      if(info.modifiedCount === 0){
+        throw new Error('Cannot update User');
+      }
+    return await getUserDetails(userId)
+}
+
+const addGroupToUser = async (userId, groupId) => {
+    helper.checkObjectId(userId);
+    helper.checkObjectId(groupId);
+    let currentUser = await getUserDetails(userId);
+    currentUser.groups.push(groupId)
+
+    const userCollection = await users();
+    const info = await userCollection.replaceOne(
+        {_id: ObjectId(userId)},
+        currentUser
       );
       if(info.modifiedCount === 0){
         throw new Error('Cannot update User');
@@ -269,7 +282,7 @@ const addFriendToUser = async (userId,friendId) => {
 
     user.friends.push(friendId);
     friend.friends.push(userId);
-
+    
     const userCollection = await users();
     const infoUser = await userCollection.replaceOne(
         {_id: ObjectId(userId)},
@@ -279,7 +292,7 @@ const addFriendToUser = async (userId,friendId) => {
         throw new Error('Cannot update User');
       } 
     const infoFriend = await userCollection.replaceOne(
-        {_id: ObjectId(userId)},
+        {_id: ObjectId(friendId)},
         friend
       );
       if(infoFriend.modifiedCount === 0){
@@ -305,8 +318,9 @@ const removeFriendFromUser = async (userId,friendId) => {
     userId = userId.trim();
     friendId = friendId.trim();
 
-    const user = getUserDetails(userId);
-    const friend = getUserDetails(friendId);
+    let user = await getUserDetails(userId);
+    let friend = await getUserDetails(friendId);
+
     if(!user.friends.includes(friendId) || !friend.friends.includes(userId)){
         throw 'Friend not present in User'
     }
@@ -315,16 +329,16 @@ const removeFriendFromUser = async (userId,friendId) => {
     friend.friends = friend.friends.filter(userIds => userIds != userId);
 
     const userCollection = await users();
-    const infoUser = await userCollection.updateOne(
+    const infoUser = await userCollection.replaceOne(
         {_id: ObjectId(userId)},
-        { $set: { friends : user.friends }}
+        user
       );
       if(infoUser.modifiedCount === 0){
         throw new Error('Cannot update User');
       } 
-    const infoFriend = await userCollection.updateOne(
-        {_id: ObjectId(userId)},
-        { $set: { friends : friend.friends }}
+    const infoFriend = await userCollection.replaceOne(
+        {_id: ObjectId(friendId)},
+        friend
       );
       if(infoFriend.modifiedCount === 0){
         throw new Error('Cannot update User');
@@ -349,5 +363,6 @@ module.exports = {
     deleteTransactionOfUser,
     addFriendToUser,
     getAllFriends,
-    removeFriendFromUser
+    removeFriendFromUser,
+    addGroupToUser
 }
