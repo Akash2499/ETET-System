@@ -59,48 +59,45 @@ router
       return res.status(400).send({ Error: e });
     }
   })
-  
+
 router
-  .route('/:userId')
-  .get(async (req, res) => {
-    try {
-      let userId = req.params.userId;
-      helper.checkObjectId(userId)
-      let userObj = await userData.getUserDetails(userId)
-      return res.status(200).send({ userObj : userObj })
-    } catch (e) {
-      return res.status(400).send({ Error: e });
+.route('/getAllUsers')
+.get(async (req, res) => {
+  try {
+    let allUsers = await userData.getAllUsers()
+    return res.status(200).send({ userData : allUsers })
+  } catch (e) {
+    return res.status(400).send({ Error: e });
+  }
+})
+
+router
+  .route('/:userId/friends/:friendId')
+  .delete(async (req,res) => {
+    try{
+      let userId = req.params.userId.trim();
+      let friendId = req.params.friendId.trim()
+
+      helper.checkObjectId(userId);
+      helper.checkObjectId(friendId);
+
+      let user = await userData.getUserDetails(userId);
+      let friend  = await userData.getUserDetails(friendId);
+
+      if(!user.friends.includes(friendId) || !friend.friends.includes(userId)){
+        throw 'Friend not present in User'
+      }
+
+      let response = await userData.removeFriendFromUser(userId,friendId);
+      return res.status(200).send({ friendAdded : true })
+      
+    }
+    catch(e){
+      return res.status(400).send({ Error: e.toString() });
     }
   })
-  .put(async (req, res) => {
-    try{
-    let userId = req.params.userId.trim();
-    let firstName = req.body.firstName.trim();
-    let lastName = req.body.lastName.trim();
-    let dateOfBirth = req.body.dateOfBirth.trim();
-    let budget = req.body.budget.trim();
 
-    helper.checkObjectId(userId)
-    helper.checkFnameLname(firstName);
-    helper.checkFnameLname(lastName);
-    helper.checkDOB(dateOfBirth);
-    helper.checkBudget(budget);
-
-    let response = await userData.updateUser(
-      userId,
-      firstName,
-      lastName,
-      dateOfBirth,
-      budget
-    )
-    return res.status(200).send({ updated : true })
-  }
-  catch (e) {
-    return res.status(400).send({ Error: e.toString() });
-  }
-  })
-
-router
+  router
   .route('/:userId/friends')
   .get(async (req,res) => {
     try {
@@ -135,6 +132,7 @@ router
       return res.status(400).send({ Error: e.toString() });
     }
   })
+
   router
   .route('/:userId/transactionByMonth')
   .get(async (req, res) => {
@@ -175,6 +173,46 @@ router
     } catch (e) {
       return res.status(400).send({ Error: e.toString() });
     }
+  })
+  
+router
+  .route('/:userId')
+  .get(async (req, res) => {
+    try {
+      let userId = req.params.userId;
+      helper.checkObjectId(userId)
+      let userObj = await userData.getUserDetails(userId)
+      return res.status(200).send({ userObj : userObj })
+    } catch (e) {
+      return res.status(400).send({ Error: e });
+    }
+  })
+  .put(async (req, res) => {
+    try{
+    let userId = req.params.userId.trim();
+    let firstName = req.body.firstName.trim();
+    let lastName = req.body.lastName.trim();
+    let dateOfBirth = req.body.dateOfBirth.trim();
+    let budget = req.body.budget.trim();
+
+    helper.checkObjectId(userId)
+    helper.checkFnameLname(firstName);
+    helper.checkFnameLname(lastName);
+    helper.checkDOB(dateOfBirth);
+    helper.checkBudget(budget);
+
+    let response = await userData.updateUser(
+      userId,
+      firstName,
+      lastName,
+      dateOfBirth,
+      budget
+    )
+    return res.status(200).send({ updated : true })
+  }
+  catch (e) {
+    return res.status(400).send({ Error: e.toString() });
+  }
   })
   
 
