@@ -2,6 +2,7 @@ import React from "react";
 import './AddGroup.css'
 import axios from "axios";
 import Multiselect from 'multiselect-react-dropdown';
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 class AddGroup extends React.Component {
 
@@ -16,7 +17,8 @@ class AddGroup extends React.Component {
         groups : [],
         allUsers : [],
         selectedMembers : [],
-        groupMembers : []
+        groupMembers : [],
+        open: false
     };
   }
 
@@ -41,12 +43,10 @@ class AddGroup extends React.Component {
     let url = this.backEndURL + "/groups/user/"+userId
     await axios.get(url)
     .then(async (data)=> {
-      console.log(data,"+++++")
       if(data.data.gorupObj){
         console.log(data.data.gorupObj)
         let groupData = []
         let groups = data.data.gorupObj
-        console.log(groups,"=====")
         for(let i=0;i<groups.length;i++){
             let url1 = this.backEndURL + "/groups/"+groups[i]
             await axios.get(url1)
@@ -103,6 +103,8 @@ class AddGroup extends React.Component {
 
   addTransaction = (event) => {
     event.preventDefault()
+    let id = event.target.id
+    window.location.href = "/add-transaction?groupId="+id
   }
 
   removeGroup = async (event) => {
@@ -123,16 +125,30 @@ class AddGroup extends React.Component {
 
   seeMembers = async (event) => {
     event.preventDefault()
+    this.setState({loading : true})
     let groupId = event.target.id
     let url = this.backEndURL+"/groups/"+groupId
     await axios.get(url)
-    .then((d)=>{
+    .then(async (d)=>{
       let res = d.data.gorupObj
-
+      let gm = []
+      for(let i=0;i<res.members.length;i++){
+        let url1 = this.backEndURL+"/users/"+res.members[i]
+        await axios.get(url1)
+          .then((u)=>{
+              let user = u.data.userObj
+              gm.push(user.firstName+" "+user.lastName);
+          })
+      }
+      this.setState({loading : false, groupMembers : gm, open : true})
     })
     .catch((e)=>{
-
+      this.setState({loading : false, groupMembers : [], open : false})
     })
+  }
+
+  toggle = () => {
+    this.setState({open : !this.state.open})
   }
 
   display = () => {
@@ -195,9 +211,32 @@ class AddGroup extends React.Component {
             </form>
           </div>
         </div>
-        <div className="col-md-12">
-            
-        </div>
+        
+        <Modal isOpen={this.state.open} toggle={this.toggle}>
+          <ModalHeader toggle={this.toggle}>Group Members</ModalHeader>
+          <ModalBody>
+            <table className="table table-bordered">
+              <thead>
+                <th></th>
+                <th>Name</th>
+              </thead>
+              <tbody>
+                {
+                  this.state.groupMembers.map((n,i)=>{
+                    return <tr>
+                      <td>{i + 1}</td>
+                      <td>{n}</td>
+                    </tr>
+                  })
+                }
+              </tbody>
+            </table>
+          </ModalBody>
+          <ModalFooter>
+            <button className="btn btn-danger" color="secondary" onClick={this.toggle}>Cancel</button>
+          </ModalFooter>
+        </Modal>
+
       </React.Fragment>
     )
   }

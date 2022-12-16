@@ -1,6 +1,7 @@
 import React from "react";
 import './AddFriend.css'
 import axios from "axios";
+import Multiselect from 'multiselect-react-dropdown';
 
 class AddFriend extends React.Component {
 
@@ -12,7 +13,8 @@ class AddFriend extends React.Component {
         friends : [],
         searchList : [],
         selectedUser : "",
-        name : ""
+        name : "",
+        selectedFriend : []
     };
   }
 
@@ -49,7 +51,11 @@ class AddFriend extends React.Component {
     let url = this.backEndURL + "/users/searchname"
     await axios.post(url,{name : name})
     .then((data)=>{
-        this.setState({searchList : data.data.findUserByName})
+        let res = data.data.findUserByName
+        res.map((r)=>{
+          r.name = r.firstName+" "+r.lastName
+        })
+        this.setState({searchList : res})
     })
     .catch((err)=>{
         this.setState({searchList : []})
@@ -59,25 +65,27 @@ class AddFriend extends React.Component {
 
   addTransaction = (event) => {
     event.preventDefault()
-    console.log(event.target.id)
+    let id = event.target.id
+    window.location.href = "/add-transaction?userId="+id
   }
 
   add = async (event) => {
     event.preventDefault()
     this.setState({loading : true})
     let userId = sessionStorage.getItem('userId')
-    let url = this.backEndURL + "/users/"+userId+"/friends"
-    await axios.post(url, {friendId : this.state.selectedUser})
-    .then(async (data)=> {
-      if(data.data.friendAdded){
-        this.setState({loading: false})
-        window.location.reload()
-      }
-    })
-    .catch((error)=>{
-      let x = error.response.data.Error
-      this.setState({loading : false})
-    })
+    console.log(this.state.selectedFriend,"===")
+    for(let i=0;i<this.state.selectedFriend.length;i++)
+    {
+      let fId = this.state.selectedFriend[i]._id.toString()
+      let url = this.backEndURL + "/users/"+userId+"/friends"
+        await axios.post(url, {friendId : fId})
+        .then(async (data)=> {return})
+        .catch((err)=>{
+          this.setState({loading : false})
+        })
+    }
+    this.setState({loading: false})
+    window.location.reload()
   }
 
   addFriend = (event) => {
@@ -104,6 +112,15 @@ class AddFriend extends React.Component {
       this.setState({loading : false})
     })
   }
+
+  onSelect = (value) => {
+    this.setState({selectedFriend : value})
+  }
+
+  onRemove = (value) => {
+    this.setState({selectedFriend: value})
+  }
+
 
   display = () => {
     return (
@@ -145,21 +162,20 @@ class AddFriend extends React.Component {
                 <h3>Add Friend</h3><br></br>
                 <form>
                     <div className="form-group">
-                        <label for="name">Email address</label>
-                        <input type="text" className="form-control" id="name" placeholder="Search name" onChange={this.handleInput} value={this.state.name}/>
+                        <label for="name">Name</label>
+                        <input type="text" className="form-control" id="name" placeholder="Search name" onChange={this.handleInput} value={this.state.name}/><br></br>
+                        {
+                          this.state.searchList == 0 ? "" : 
+                          <Multiselect
+                            options={this.state.searchList}
+                            selectedValues={this.state.selectedFriend}
+                            onSelect={this.onSelect}
+                            onRemove={this.onRemove} 
+                            displayValue="name"
+                            placeholder="Suggestions"
+                          />
+                        }
                     </div>
-                    {
-                        this.state.searchList.length == 0 ? "" :
-                        <ol>
-                            {
-                                this.state.searchList.map((user)=>{
-                                    return <li className="li-style" id={JSON.stringify(user)} onClick={this.addFriend}>
-                                        {user.firstName} {user.lastName}
-                                    </li>
-                                })
-                            }
-                        </ol>
-                    }
                     <button type="submit" className="btn btn-info btn-style" onClick={this.add}>
                         {
                             this.state.loading ?
