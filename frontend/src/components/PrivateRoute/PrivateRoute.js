@@ -12,7 +12,7 @@ class PrivateRoute extends React.Component {
   }
 
   componentWillMount = () => {
-    if(sessionStorage.getItem("useremail")){
+    if(sessionStorage.getItem("userId")){
         this.setState({render : true})
     } else {
         this.setState({render : false})

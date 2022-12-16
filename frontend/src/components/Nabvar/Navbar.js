@@ -6,7 +6,7 @@ function Navbar(props) {
 
 	const logout = (event) => {
 		event.preventDefault()
-		sessionStorage.removeItem("useremail")
+		sessionStorage.removeItem("userId")
 		window.location.href = "/"
 	}
 
@@ -14,7 +14,7 @@ function Navbar(props) {
 		<nav class="navbar navbar-dark bg-dark">
             <span className="navbar-brand h1 set-span-nav"><a href="/" className="navbar-link">ETET</a></span>
 			{
-			sessionStorage.getItem("useremail") ?
+			sessionStorage.getItem("userId") ?
 			<span className="navbar-brand h1 set-span-nav"><button className='btn btn-info' onClick={logout}>Logout</button></span>	: ""
 		 	}
 			

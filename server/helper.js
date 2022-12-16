@@ -155,6 +155,13 @@ function checkGroupTransactions(transactions){
     })
 }
 
+function checkTransactionDate(date){
+    if(new Date - new Date(date) <=0){
+        throw 'Given date is greater than current date';
+    }
+    return true;
+}
+
 const getTodaysDate = () => {
     today = new Date()
     day = today.getDate()
@@ -178,6 +185,7 @@ module.exports = {
     checkObjectId,
     checkGroupMembers,
     checkGroupTransactions,
-    getTodaysDate
+    getTodaysDate,
+    checkTransactionDate
 }
 
