@@ -18,11 +18,6 @@ class Home extends React.Component {
     this.setState(state)
   }
 
-  login = (event) => {
-    event.preventDefault()
-    window.location.href = "/my-activities"
-  }
-
   addTransaction = (event) => {
     event.preventDefault()
     window.location.href = "/add-transaction"
@@ -36,6 +31,11 @@ class Home extends React.Component {
   addFriend = (event) => {
     event.preventDefault()
     window.location.href = "/add-friend"
+  }
+
+  myActivity = (event) => {
+    event.preventDefault()
+    window.location.href = "/my-activities"
   }
 
   display = () => {
@@ -69,14 +69,17 @@ class Home extends React.Component {
         </div>
         <hr></hr>
         <div className="row add-style">
-          <div className="col-md-4">
+          <div className="col-md-3">
             <button className="btn btn-info" onClick={this.addFriend}>Add Friend</button>
           </div>
-          <div className="col-md-4">
+          <div className="col-md-3">
             <button className="btn btn-info" onClick={this.addTransaction}>Add Transaction</button>
           </div>
-          <div className="col-md-4">
+          <div className="col-md-3">
             <button className="btn btn-info" onClick={this.addGroup}>Add Group</button>
+          </div>
+          <div className="col-md-3">
+            <button className="btn btn-info" onClick={this.myActivity}>My Activity</button>
           </div>
         </div>
       </React.Fragment>

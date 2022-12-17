@@ -129,14 +129,15 @@ const updateTransaction = async (
     category,
     paidBy,
     groupId,
-    comments
+    comments,
+    transactionDate
 ) => {
 
     helper.checkObjectId(transactionId)
     helper.checkUserId(userIds)
-    userIds = userIds.map((uid)=>{
-        helper.checkObjectId(uid)
-        return uid.trim()
+    userIds.map((uid)=>{
+        helper.checkObjectId(uid.userId)
+        return uid.userId.trim()
     })
     helper.checkString(name);
     helper.checkObjectId(paidBy);
@@ -156,6 +157,7 @@ const updateTransaction = async (
     transactionObj.paidBy = paidBy
     transactionObj.groupId = groupId
     transactionObj.comments = comments
+    transactionObj.transactionDate = transactionDate
 
     const updatedInfo = await transactionCollection.replaceOne(
         {_id: ObjectId(transactionId)},
