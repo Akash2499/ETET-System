@@ -235,7 +235,19 @@ class AddTransaction extends React.Component {
   }
 
   onSelectGroupOption = (value) => {
-    this.setState({selectedGroupName : value})
+    this.setState({selectedGroupName : value, groupId : value[0]._id.toString()})
+    let obj = value[0].members
+    let grp = []
+    obj.map(async (m)=>{
+      let url = this.backEndURL+"/users/"+m.toString()
+      await axios.get(url)
+      .then((d)=>{
+        let obj = d.data.userObj
+        obj["name"] = obj.firstName+" "+obj.lastName
+        grp.push(obj)
+      })
+    })
+    this.setState({allUser: grp, transactionMembers : grp})
   }
 
   onRemoveGroupOption = (value) => {
