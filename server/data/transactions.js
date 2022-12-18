@@ -21,9 +21,9 @@ const addTransaction = async (
 ) => {
 
     //helper.checkUserId(userIds)
-    userIds = userIds.map((uid)=>{
-        helper.checkObjectId(uid)
-        return ObjectId(uid.trim())
+    userIds.map((uid)=>{
+        helper.checkObjectId(uid.userId)
+        uid.userId.trim()
     })
     helper.checkString(name)
     helper.checkObjectId(paidBy)
@@ -51,8 +51,8 @@ const addTransaction = async (
     if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Error while adding transaction'
 
     //await user.addTransactionToUser(paidBy, insertInfo.insertedId.toString())
-    userIds.map(async (userId)=>{
-        await user.addTransactionToUser(userId.toString(), insertInfo.insertedId.toString())
+    userIds.map(async (u)=>{
+        await user.addTransactionToUser(u.userId.toString(), insertInfo.insertedId.toString())
     })
 
     return { inserted : true };
@@ -129,14 +129,15 @@ const updateTransaction = async (
     category,
     paidBy,
     groupId,
-    comments
+    comments,
+    transactionDate
 ) => {
 
     helper.checkObjectId(transactionId)
     helper.checkUserId(userIds)
-    userIds = userIds.map((uid)=>{
-        helper.checkObjectId(uid)
-        return uid.trim()
+    userIds.map((uid)=>{
+        helper.checkObjectId(uid.userId)
+        return uid.userId.trim()
     })
     helper.checkString(name);
     helper.checkObjectId(paidBy);
@@ -156,6 +157,7 @@ const updateTransaction = async (
     transactionObj.paidBy = paidBy
     transactionObj.groupId = groupId
     transactionObj.comments = comments
+    transactionObj.transactionDate = transactionDate
 
     const updatedInfo = await transactionCollection.replaceOne(
         {_id: ObjectId(transactionId)},

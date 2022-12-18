@@ -73,6 +73,7 @@ router
         let paidBy = req.body.paidBy
         let groupId = req.body.groupId
         let comments = req.body.comments
+        let transactionDate = req.body.transactionDate
 
         let response = await transactionData.updateTransaction(
             transactionId,
@@ -81,7 +82,8 @@ router
             category,
             paidBy,
             groupId,
-            comments
+            comments,
+            transactionDate
         )
         if(response.modified)
             return res.status(200).send({ modified : true })
