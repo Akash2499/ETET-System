@@ -3,7 +3,7 @@ const users = mongoCollections.users;
 const helper = require('../helper');
 const bcryptjs = require('bcryptjs');
 const saltRounds = 16;
-const {ObjectId} = require('mongodb');
+const {ObjectId, CURSOR_FLAGS} = require('mongodb');
 
 const getAllUsers = async () => {
     const userCollection = await users();
@@ -206,6 +206,21 @@ const addGroupToUser = async (userId, groupId) => {
     return await getUserDetails(userId)
 }
 
+const getUserbyEmail = async(email) =>{
+    try{
+    const userCollection = await users()
+    const userPresent = await userCollection.findOne({email:email})
+    if(!userPresent){
+        throw "User not found!!"
+    }
+    return userPresent
+
+    }catch(e){
+        console.log("User not present")
+    }
+
+}
+
 const deleteTransactionOfUser = async (userId,transactionId) =>{
     helper.checkObjectId(userId);
     helper.checkObjectId(transactionId);
@@ -219,6 +234,7 @@ const deleteTransactionOfUser = async (userId,transactionId) =>{
     const updatedUser = {
         transactions: newTransactions
     }
+
 
     const info = await userCollection.updateOne(
         {_id: ObjectID(userId)},
@@ -314,6 +330,40 @@ const getAllFriends = async (userId) => {
     return user.friends
 }
 
+const createUserFirebase = async ( 
+    firstName,
+    lastName,
+    dateOfBirth,
+    email,
+    password,
+    budget
+) => {
+     
+    helper.checkDOB(dateOfBirth);
+    const userCollection = await users();
+    const userPresent = await  userCollection.findOne({email: email})
+    if(userPresent !== null){
+        throw 'Email already registred'
+    }
+
+    const newUser = {
+        firstName: firstName,
+        lastName: lastName,
+        dateOfBirth: dateOfBirth,
+        email: email,
+        password: password,
+        friends: [],
+        transactions: [],
+        groups: [],
+        budget: budget
+    }
+
+    const insertUser = await userCollection.insertOne(newUser);
+    if (!insertUser.acknowledged || !insertUser.insertedId)
+    throw 'Could not add User';
+    return await getUserDetails(insertUser.insertedId.toString())
+}
+
 const removeFriendFromUser = async (userId,friendId) => {
     helper.checkObjectId(userId);
     helper.checkObjectId(friendId);
@@ -377,5 +427,7 @@ module.exports = {
     getAllFriends,
     removeFriendFromUser,
     addGroupToUser,
-    getEmailById
+    getEmailById,
+    getUserbyEmail,
+    createUserFirebase
 }
