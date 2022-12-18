@@ -10,3 +10,41 @@
     margin-top: 5em;
     text-align: center;
 }
+
+.owe {
+    color: #ff3333;
+    margin-top: 15%;
+}
+
+.owned {
+    color: #00cc00;
+    margin-top: 15%;
+}
+
+.card-size-green{
+    transition: scale .3s;
+    height: 20em !important;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: large;
+    background-color: #505a62 !important
+}
+
+.card-size-red{
+    transition: scale .3s;
+    height: 20em !important;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: large;
+    background-color: #505a62 !important
+}
+
+.card-size-green:hover {
+    scale: 1.05;
+}
+
+.card-size-red:hover {
+    scale: 1.05;
+}

@@ -1,9 +1,17 @@
 import React from "react";
 import './MyActivity.css'
 import axios from "axios";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { Pie } from 'react-chartjs-2';
+import { Chart as ChartJS,
+  ArcElement,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend } from 'chart.js';
+import { Pie, Bar } from 'react-chartjs-2';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import Multiselect from 'multiselect-react-dropdown';
 
 class MyActivity extends React.Component {
 
@@ -44,13 +52,32 @@ class MyActivity extends React.Component {
       commentModal : false,
       selectedComments : [],
       selectedCommentName : "",
-      selectedCommentsId : ""
+      selectedCommentsId : "",
+      allMonths : [],
+      selectedMonth1 : [],
+      selectedMonth2 : [],
+      compareData : {},
+      showBar : false,
     };
   }
 
   componentWillMount = async () => {
 
-    ChartJS.register(ArcElement, Tooltip, Legend);
+    let mm = []
+    for(let i=1;i<=12;i++){
+      mm.push({name : this.months[i], id: i})
+    }
+    this.setState({allMonths : mm})
+
+    ChartJS.register(
+      ArcElement, 
+      Tooltip, 
+      Legend, 
+      BarElement,
+      CategoryScale,
+      LinearScale,
+      Title
+    );
 
     let userId = sessionStorage.getItem("userId")
     let url = this.backendUrl+"/users/"+userId
@@ -358,6 +385,80 @@ class MyActivity extends React.Component {
     })
   }
 
+  onSelectMonth1 = (value) => {
+    this.setState({selectedMonth1 : value})
+  }
+
+  onSelectMonth2 = (value) => {
+    this.setState({selectedMonth2: value})
+  }
+
+  compare = (event) => {
+    event.preventDefault()
+    this.setState({showBar : false})
+    let month1 = this.state.selectedMonth1[0].id
+    let month2 = this.state.selectedMonth2[0].id 
+    let allT = this.state.allT
+    let m1 = []
+    let m2 = []
+    allT.map((t)=>{
+      let month = t.transactionDate.split("/")[0]
+      if(month==month1){
+        m1.push(t)
+      }
+      if(month==month2){
+        m2.push(t)
+      }
+    })
+
+    let category = this.state.allCategory
+    let mL = [], m1D = [], m2D = []
+    category.map((c)=>{
+
+      let count = 0
+      m1.map((m)=>{
+        if(m.category==c)
+        {
+          let p = m.userIds.filter((tmp)=>tmp.userId.toString()==sessionStorage.getItem("userId").toString())
+          count += Math.abs(p[0].amountOwed)
+        }
+      })
+
+      mL.push(c)
+      m1D.push(count)
+
+      count = 0
+      m2.map((m)=>{
+        if(m.category==c)
+        {
+          let p = m.userIds.filter((tmp)=>tmp.userId.toString()==sessionStorage.getItem("userId").toString())
+          count += Math.abs(p[0].amountOwed)
+        }
+      })
+
+      m2D.push(count)
+
+    })
+
+    let res = {
+      labels : mL,
+      datasets: [
+        {
+          label: this.months[month1],
+          data: m1D,
+          backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        },
+        {
+          label: this.months[month2],
+          data: m2D,
+          backgroundColor: 'rgba(53, 162, 235, 0.5)',
+        },
+      ],
+    }
+    console.log(res,"<=========")
+    this.setState({compareData : res, showBar:true})
+  }
+
   display = () => {
     return (
       <React.Fragment>
@@ -383,6 +484,39 @@ class MyActivity extends React.Component {
               <Pie className="chart changeCursor" data={this.state.transactionByGroups}/>
             }
           </div>
+        </div>
+        <br></br><br></br>
+        <div className="row">
+            <h3>Compare Expenses by Month</h3>
+            <div className="col-md-12">
+              <div className="form-group">
+                <label for="month1">Month 1</label>
+                <Multiselect
+                    options={this.state.allMonths}
+                    selectedValues={this.state.selectedMonth1}
+                    onSelect={this.onSelectMonth1}
+                    singleSelect={true}
+                    displayValue="name"
+                  />
+              </div>
+              <div className="form-group">
+                <label for="month2">Month 2</label>
+                <Multiselect
+                    options={this.state.allMonths}
+                    selectedValues={this.state.selectedMonth2}
+                    onSelect={this.onSelectMonth2}
+                    singleSelect={true}
+                    displayValue="name"
+                  />
+              </div>
+              <button className="btn btn-success" onClick={this.compare} disabled={this.state.selectedMonth1.length == 0 || this.state.selectedMonth2.length == 0}>Compare</button>
+              {
+                !this.state.showBar || Object.keys(this.state.compareData).length == 0 ? "" :
+                <div className="barChart">
+                  <Bar className="chart changeCursor" data={this.state.compareData}/>
+                </div> 
+              }
+            </div>
         </div>
         <br></br><br></br>
         <div className="row">
