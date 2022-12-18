@@ -36,3 +36,8 @@
 .changeCursor{
     cursor: pointer;
 }
+
+.barChart {
+    height: 20em;
+    text-align: -webkit-center !important;
+}
