@@ -53,6 +53,47 @@ router.route("/register").post(async (req, res) => {
   }
 });
 
+router.route("/getUserByEmail").get(async(req,res)=>{
+  try{
+    let email = req.body.email
+    let users = await userData.getUserbyEmail(email)
+    return users
+
+  }catch(e){
+    console.log(e)
+
+  }
+})
+router.route("/register/oauth").post(async(rer,res)=>{
+  try{
+    let firstName = req.body.firstName.split(" ")[0]
+    let lastName = req.body.firstName.split(" ")[1]
+    lastName = lastName?lastName:"Patel"
+    let dateOfBirth = req.body.dateOfBirth;
+    dateOfBirth = dateOfBirth?dateOfBirth: "07/05/1998"
+    let email = req.body.email;
+    let password = "oauthPassword";
+    let budget = "100"; 
+
+    let response = await userData.createUserFirebase(
+      firstName,
+      lastName,
+      dateOfBirth,
+      email,
+      password,
+      budget
+    )
+    if(response){
+      return res.status(200).send({userId: response._id.toString()});
+    }else{
+      throw "User cannot be added!!"
+    }
+    
+  }catch(e){
+    return res.status(400).send({ Error: e });
+  }
+})
+
 router.route("/getAllUsers").get(async (req, res) => {
   try {
     let allUsers = await userData.getAllUsers();
