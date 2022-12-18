@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import {logoutOauth} from '../Firebase/Firebase'
 import './Navbar.css';
 
 function Navbar(props) {
@@ -7,6 +8,9 @@ function Navbar(props) {
 	const logout = (event) => {
 		event.preventDefault()
 		sessionStorage.removeItem("userId")
+		if(sessionStorage.getItem("oauth")){
+			logoutOauth();
+		}
 		window.location.href = "/"
 	}
 
@@ -45,7 +49,6 @@ function Navbar(props) {
 				<span className="navbar-brand h1 set-span-nav"><button className='btn btn-danger' onClick={logout}>Logout</button></span>
 			</React.Fragment> : ""
 		 	}
-			
         </nav>
 	);
 }
