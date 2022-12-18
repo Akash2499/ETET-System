@@ -1,4 +1,4 @@
-import { auth, signInWithEmailAndPassword, signInWithGoogle } from "./firebase";
+import { auth, signInWithGoogle } from "../Firebase/Firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -15,15 +15,17 @@ function OauthLogin(){
           alert (error)
       }
       if (user){
-        navigate("/my-activities")
+          console.log(user)
+          sessionStorage.setItem("userId", user.uid)
+          sessionStorage.setItem("email", user.email)
+          sessionStorage.setItem("oauth", true)
+        // navigate("/my-activities")
       } ;
     }, [user, loading]);
     return (
       <div className="login">
         <div className="login__container"> 
-          <button className="login__btn login__google" onClick={signInWithGoogle}>
-            Login with Google
-          </button>
+            <img onClick={signInWithGoogle} className="set-img" src="google.png"/> 
         </div>
       </div>
     );
