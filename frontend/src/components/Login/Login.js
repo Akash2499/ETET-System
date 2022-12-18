@@ -1,6 +1,7 @@
 import React from "react";
 import './Login.css'
 import axios from "axios";
+import OauthLogin from "../OauthLogin/OauthLogin";
 
 class Login extends React.Component {
 
@@ -79,7 +80,8 @@ class Login extends React.Component {
               <br></br>
               <span className="login-span"> <a href="/register"> Don't have an account ? Register here </a></span>
               <div>
-              <img onClick={this.googleAuth} className="set-img" src="google.png"/>
+              {/* <img onClick={this.googleAuth} className="set-img" src="google.png"/> */}
+              <OauthLogin />
               </div>
         </div>
       </React.Fragment>

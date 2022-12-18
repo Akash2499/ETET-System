@@ -1,25 +1,34 @@
 const nodemailer = require('nodemailer');
- 
+const helper = require('./helper')
  
 let mailTransporter = nodemailer.createTransport({
-    service: 'in-v3.mailjet.com',
+    service: "gmail",
     auth: {
-        user: 'etet.systems@gmail.com',
-        pass: 'Akash@240199?'
-    }
-});
+      user: "etet.systems@gmail.com",
+      pass: "dozrqiduronfngxl",
+    },
+  });
  
-let mailDetails = {
-    from: 'xyz@gmail.com',
-    to: 'abc@gmail.com',
-    subject: 'Test mail',
-    text: 'Node.js testing mail for GeeksforGeeks'
-};
- 
-mailTransporter.sendMail(mailDetails, function(err, data) {
-    if(err) {
-        console.log(err);
-    } else {
-        console.log('Email sent successfully');
-    }
-});
+
+const sendEmail = (userEmail, subject, message) => {
+    helper.checkString(userEmail);
+    helper.checkString(message);
+    let mailDetails = {
+        from: 'etet.systems@gmail.com',
+        to: userEmail,
+        subject: subject,
+        text: message
+    };
+    
+    mailTransporter.sendMail(mailDetails, function(err, data) {
+        if(err) {
+            console.log(err);
+        } else {
+            console.log('Email sent successfully');
+        }
+    });
+}
+
+module.exports = {
+    sendEmail
+}
