@@ -40,7 +40,11 @@ class MyActivity extends React.Component {
       modalPaidBy : "",
       modalAmount : 0,
       open: false,
-      loading: false
+      loading: false,
+      commentModal : false,
+      selectedComments : [],
+      selectedCommentName : "",
+      selectedCommentsId : ""
     };
   }
 
@@ -224,12 +228,135 @@ class MyActivity extends React.Component {
     this.setState({open : !this.state.open})
   }
 
+  toggleComment = () => {
+    this.setState({commentModal : !this.state.commentModal})
+  }
+
   alreadyPaid = (t) => {
-    let paidBy = t.paidBy
     let userId = sessionStorage.getItem("userId")
     let f = t.userIds.filter((f)=>f.userId.toString()==userId)
     return f[0].paid ? f[0].paid : false
   } 
+
+  commentClicked = async (event) => {
+    event.preventDefault()
+    let id = event.target.id
+    let t = JSON.parse(id)
+    this.toggleComment()
+    for(let i=0;i<t.comments.length;i++){
+      let uId = t.comments[i].commentedBy.toString()
+      let url = this.backendUrl+"/users/"+uId
+      await axios.get(url)
+      .then((d)=>{
+        let usr = d.data.userObj
+        t.comments[i].name = usr.firstName+" "+usr.lastName
+        t.comments[i].showEdit = usr._id.toString()==sessionStorage.getItem("userId").toString()
+      })
+    }
+    console.log(t.comments)
+    await this.setState({selectedComments : t.comments, selectedCommentName : t.name, selectedCommentsId: t._id.toString()})
+  }
+
+  addComment = async (event) => {
+    event.preventDefault()
+    let userId = sessionStorage.getItem("userId")
+    let url = this.backendUrl+"/users/"+userId
+    let name = ""
+    await axios.get(url)
+    .then((d)=>{
+      let usr = d.data.userObj
+      name = usr.firstName+" "+usr.lastName
+    })  
+    let selectedComments = this.state.selectedComments
+    selectedComments.push({
+      commentedBy : userId,
+      name : name,
+      comment : "",
+      editClicked: true,
+      showEdit : true
+    })
+    this.setState({selectedComments : selectedComments})
+  }
+
+  editComment = (event) => {
+    event.preventDefault()
+    let tmp = event.target.id
+    let id = tmp.split("#")[0]
+    let selectedComments = this.state.selectedComments
+    selectedComments.map((c,i)=>{
+      if(c._id && c._id.toString()==id){
+        c.editClicked = true
+      } else if(!c._id && i==tmp[1]){
+        c.editClicked = true
+      }
+    })
+    this.setState({selectedComments : selectedComments})
+  }
+
+  saveComment = (event) => {
+    event.preventDefault()
+    let tmp = event.target.id
+    let id = tmp.split("#")[0]
+    let selectedComments = this.state.selectedComments
+    selectedComments.map((c, i)=>{
+      if(c._id && c._id.toString()==id){
+        c.editClicked = false
+      } else if(!c._id && i==tmp[1]){
+        c.editClicked = false
+      }
+    })
+    this.setState({selectedComments : selectedComments})
+  }
+
+  deleteComment = (event) => {
+    event.preventDefault()
+    let tmp = event.target.id
+    let id = tmp.split("#")[0]
+    let selectedComments = this.state.selectedComments
+    selectedComments = selectedComments.filter((c, i)=>{
+      if(c._id && c._id.toString()==id){
+        return false
+      } else if(!c._id && i==tmp[1]){
+        return false
+      }
+      return true
+    })
+    this.setState({selectedComments : selectedComments})
+  }
+
+  handleCommentText = (event) => {
+    event.preventDefault()
+    let val = event.target.value
+    let tmp = event.target.id
+    let id = tmp.split("#")[0]
+    let selectedComments = this.state.selectedComments
+    selectedComments.map((c, i)=>{
+      if(c._id && c._id.toString()==id){
+        c.comment = val
+      } else if(!c._id && i==tmp[1]){
+        c.comment = val
+      }
+    })
+    this.setState({selectedComments : selectedComments})
+  }
+
+  cancelComment = async (event) => {
+    event.preventDefault()
+    let tId = this.state.selectedCommentsId
+    let selectedComments = this.state.selectedComments
+    let url = this.backendUrl+"/transactions/editcomment/"+tId
+    await axios.post(url,{
+      comments : selectedComments
+    })
+    .then((d)=>{
+      if(d.data.modified){
+       window.location.reload()
+      }
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+  }
 
   display = () => {
     return (
@@ -272,6 +399,7 @@ class MyActivity extends React.Component {
                       <th>Total Amount</th>
                       <th>Your share</th>
                       <th></th>
+                      <th></th>
                     </thead>
                     <tbody>
                       {
@@ -287,6 +415,7 @@ class MyActivity extends React.Component {
                             this.alreadyPaid(t) ? <b className="green">Paid</b>:
                             <button className="btn btn-success" id={JSON.stringify(t)} onClick={this.payNow}>Pay Now</button>
                             }</td>
+                            <td><button className="btn btn-sm btn-primary" id={JSON.stringify(t)} onClick={this.commentClicked}>Comments</button></td>
                           </tr>
                         })
                       }
@@ -318,6 +447,58 @@ class MyActivity extends React.Component {
           </ModalBody>
           <ModalFooter>
             <button className="btn btn-danger" color="secondary" onClick={this.toggle}>Cancel</button>
+          </ModalFooter>
+        </Modal>
+
+        <Modal isOpen={this.state.commentModal} toggle={this.toggleComment}>
+          <ModalHeader toggle={this.toggleComment}>Transaction Comments</ModalHeader>
+          <ModalBody>
+            <h3> Transaction Name : <b className="green">{this.state.selectedCommentName}</b></h3>
+            <table className="table table-bordered">
+              <thead>
+                <th>CommentedBy</th>
+                <th>Comment</th>
+                <td></td>
+                <td></td>
+              </thead>
+              <tbody>
+                {
+                  this.state.selectedComments.map((n,i)=>{
+                    return <tr>
+                      <td>{n.name}</td>
+                      <td>
+                        {
+                          n.editClicked ?
+                          <input type="text" id={n._id ? n._id+"#"+i : "#"+i} value={n.comment} onChange={this.handleCommentText}/>
+                          : n.comment
+                        }
+                      </td>
+                      <td>
+                        {
+                          n.editClicked ? 
+                          <button className="btn btn-sm btn-success" id={n._id ? n._id+"#"+i : "#"+i} onClick={this.saveComment}>Save</button>
+                          :
+                          n.showEdit ? 
+                          <button className="btn btn-sm btn-warning" id={n._id ? n._id+"#"+i : "#"+i} onClick={this.editComment}>Edit</button>
+                          : ""
+                        }
+                      </td>
+                      <td>
+                        {
+                          n.showEdit ? 
+                          <button className="btn btn-sm btn-danger" id={n._id ? n._id+"#"+i : "#"+i} onClick={this.deleteComment}>Delete</button>
+                          : ""
+                        }
+                      </td>
+                    </tr>
+                  })
+                }
+              </tbody>
+            </table>
+          </ModalBody>
+          <ModalFooter>
+            <button className="btn btn-primary" color="secondary" onClick={this.addComment}>Add Comment</button>
+            <button className="btn btn-success" color="secondary" onClick={this.cancelComment}>Done</button>
           </ModalFooter>
         </Modal>
       </React.Fragment>
