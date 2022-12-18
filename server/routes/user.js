@@ -3,6 +3,7 @@ const router = express.Router();
 const helper = require("../helper");
 const data = require("../data");
 const userData = data.users;
+const sendEmail = require('../email')
 const groupData = data.groups;
 
 router.route("/validate").post(async (req, res) => {

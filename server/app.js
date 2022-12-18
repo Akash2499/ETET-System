@@ -4,9 +4,12 @@ const app = express();
 const session = require("express-session");
 const configRoutes = require("./routes");
 const exphbs = require("express-handlebars");
+const email = require('./email')
 
 app.use(cors());
 app.use(express.json());
+
+// email.sendEmail('akash1999patel@gmail.com','Test Email', 'This email was ent from app.js')
 // app.use(express.urlencoded({extended: true}));
 // app.engine('handlebars', exphbs.engine({defaultLayout: 'main'}));
 // app.set('view engine', 'handlebars');
