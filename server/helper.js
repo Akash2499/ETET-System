@@ -96,7 +96,7 @@ function checkDOB(date){
     }
 }
 function checkBudget(value){
-    if(typeof(value) !== 'number'){
+    if(typeof(value) !== 'string'){
         throw 'Invalid Budget';
     }
     
