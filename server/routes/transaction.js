@@ -93,6 +93,22 @@ router
   })
 
 router
+.route('/editcomment/:transactionId')
+  .post(async (req, res) => {  
+    try {
+        let transactionId = req.params.transactionId
+        let comments = req.body.comments
+    
+        let response = await transactionData.updateCommentToTransaction(transactionId, comments)
+        if(response.modified)
+            return res.status(200).send({ modified : true })
+        return res.status(400).send({ modified : false })
+      } catch (e) {
+        return res.status(400).send({ Error: e });
+      }
+  })
+
+router
   .route('/comment/:transactionId')
   .post(async (req, res) => {  
     try {

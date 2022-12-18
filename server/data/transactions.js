@@ -35,6 +35,9 @@ const addTransaction = async (
     category = category.trim()
     paidBy = ObjectId(paidBy.trim())
     transactionDate = transactionDate || helper.getTodaysDate()
+    comments.map((c)=>{
+        c._id = new ObjectId()
+    })
 
     const transactionCollection = await transactions()
     const insertInfo = await transactionCollection.insertOne({
@@ -79,17 +82,18 @@ const addCommentToTransaction = async (transactionId, comment) => {
     return { modified : true }
 }
 
-const updateCommentToTransaction = async (transactionId, commentId, comment) => {
+const updateCommentToTransaction = async (transactionId, comments) => {
 
     helper.checkObjectId(transactionId)
-    helper.checkObjectId(commentId)
-    commentId = commentId.trim()
     let transactionObj = await getTransactionById(transactionId)
-    transactionObj.comments = transactionObj.comments.map((c)=>{
-        if(c._id.toString() == commentId){
-            c.comment = comment
+    comments = comments.map((c)=>{
+        return {
+            _id : c._id ? c._id : new ObjectId(),
+            commentedBy : c.commentedBy,
+            comment : c.comment
         }
     })
+    transactionObj.comments = comments
     const transactionCollection = await transactions();
     const updatedInfo = await transactionCollection.replaceOne(
         {_id: transactionObj._id},

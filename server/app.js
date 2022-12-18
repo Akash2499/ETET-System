@@ -1,11 +1,27 @@
-const express = require('express');
-var cors = require('cors')
+const express = require("express");
+var cors = require("cors");
 const app = express();
+<<<<<<< HEAD
 const session = require('express-session');
 const configRoutes = require('./routes');
 const exphbs = require('express-handlebars');
+const { OAuth2Client } = require("google-auth-library");
+const jwt = require("jsonwebtoken");
+require("dotenv/config"); //
 
-app.use(cors())
+var corsOptions = {
+  origin: 'http://localhost:3000',
+  methods: "GET,POST,PUT,DELETE,OPTIONS",
+}
+
+app.use(cors(corsOptions))
+app.use(express.json());
+=======
+const session = require("express-session");
+const configRoutes = require("./routes");
+const exphbs = require("express-handlebars");
+
+app.use(cors());
 app.use(express.json());
 // app.use(express.urlencoded({extended: true}));
 // app.engine('handlebars', exphbs.engine({defaultLayout: 'main'}));
@@ -19,7 +35,6 @@ app.use(express.json());
 //     resave: false,
 //     saveUninitialized: true
 //   }));
-  
 
 // app.use('/login', (req,res, next) => {
 //     if(req.session.user){
@@ -48,10 +63,11 @@ app.use(express.json());
 //         next();
 //     }
 // })
+>>>>>>> 4a3bb2af69f832fa85eaac8b11254bf00765c69e
 
 configRoutes(app);
 
 app.listen(4000, () => {
   console.log("We've now got a server!");
-  console.log('Server will be running on http://localhost:4000');
+  console.log("Server will be running on http://localhost:4000");
 });

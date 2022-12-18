@@ -45,6 +45,10 @@ class Login extends React.Component {
     })
   }
 
+  googleAuth = (event) => {
+    event.preventDefault()
+  }
+
   display = () => {
     return (
       <React.Fragment>
@@ -72,7 +76,11 @@ class Login extends React.Component {
               <div className="set-error">
                 {this.state.error}
               </div>
+              <br></br>
               <span className="login-span"> <a href="/register"> Don't have an account ? Register here </a></span>
+              <div>
+              <img onClick={this.googleAuth} className="set-img" src="google.png"/>
+              </div>
         </div>
       </React.Fragment>
     )
