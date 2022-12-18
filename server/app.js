@@ -1,11 +1,11 @@
-const express = require('express');
-var cors = require('cors')
+const express = require("express");
+var cors = require("cors");
 const app = express();
-const session = require('express-session');
-const configRoutes = require('./routes');
-const exphbs = require('express-handlebars');
+const session = require("express-session");
+const configRoutes = require("./routes");
+const exphbs = require("express-handlebars");
 
-app.use(cors())
+app.use(cors());
 app.use(express.json());
 // app.use(express.urlencoded({extended: true}));
 // app.engine('handlebars', exphbs.engine({defaultLayout: 'main'}));
@@ -19,7 +19,6 @@ app.use(express.json());
 //     resave: false,
 //     saveUninitialized: true
 //   }));
-  
 
 // app.use('/login', (req,res, next) => {
 //     if(req.session.user){
@@ -53,5 +52,5 @@ configRoutes(app);
 
 app.listen(4000, () => {
   console.log("We've now got a server!");
-  console.log('Server will be running on http://localhost:4000');
+  console.log("Server will be running on http://localhost:4000");
 });
