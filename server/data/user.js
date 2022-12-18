@@ -350,6 +350,15 @@ const removeFriendFromUser = async (userId,friendId) => {
     return {friendRemoved: true}
 }
 
+
+const getEmailById = async (userId) => {
+    userId = userId.toString().trim();
+    helper.checkObjectId(userId);
+
+    const user = await getUserDetails(userId);
+    return user.email
+}
+
 module.exports = {
     createUser,
     checkUser,
@@ -367,5 +376,6 @@ module.exports = {
     addFriendToUser,
     getAllFriends,
     removeFriendFromUser,
-    addGroupToUser
+    addGroupToUser,
+    getEmailById
 }
