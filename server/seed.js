@@ -29,17 +29,19 @@ async function main() {
 
 
         //groups ceation between different users
-        const group1 = await groupData.createGroup([user1._id,user2._id,user3._id],'North St',[]);
-        const group2 = await groupData.createGroup([user3._id,user4._id], 'Beach St', []);
-        const group3 = await groupData.createGroup([user1._id,user2._id,user3._id,user4._id],'All Boyz', []);
+        const group1 = await groupData.createGroup([user1._id,user2._id,user3._id],'North St',[],user1._id);
+        const group2 = await groupData.createGroup([user3._id,user4._id], 'Beach St', [],user4._id);
+        const group3 = await groupData.createGroup([user1._id,user2._id,user3._id,user4._id],'All Boyz', [],user3._id);
 
+
+        await userData.addGroupToUser(user1._id,user2._id)
         //add transcations to groups
-        const trans1 = await transactionData.addTransaction([user1._id,user2._id,user3._id],'Uber', 'Travel', user2._id, "12.50",group1._id,[]);
-        const trans2 = await transactionData.addTransaction([user1._id,user2._id], 'Patel', 'Grocery',user2._id,"50",group1._id,[]);
-        const trans3 = await transactionData.addTransaction([user1._id,user2._id,user3._id,user4._id], 'Top Golf', 'Other', user2._id, "40", group3._id,[],'12/12/2022');
-        const trans4 = await transactionData.addTransaction([user3._id,user4._id],'Party', 'Other', user4._id, "55.60",group2._id,[]);
-        const trans5 = await transactionData.addTransaction([user1._id,user4._id], 'Apna', 'Grocery', user1._id, "77", null,[]);
-        const trans6 = await transactionData.addTransaction([user3._id,user4._id], 'Apna', 'Grocery', user3._id, "20", null,[]);
+        //const trans1 = await transactionData.addTransaction([{ userId: user1._id, amountOwed: '5' },{userId: user2._id, amountOwed: '5'},{userId :user3._id, amountOwed:'2.5'}],'Uber', 'Travel', user2._id, "12.50",group1._id,[]);
+        // const trans2 = await transactionData.addTransaction([user1._id,user2._id], 'Patel', 'Grocery',user2._id,"50",group1._id,[]);
+        // const trans3 = await transactionData.addTransaction([user1._id,user2._id,user3._id,user4._id], 'Top Golf', 'Other', user2._id, "40", group3._id,[],'12/12/2022');
+        // const trans4 = await transactionData.addTransaction([user3._id,user4._id],'Party', 'Other', user4._id, "55.60",group2._id,[]);
+        // const trans5 = await transactionData.addTransaction([user1._id,user4._id], 'Apna', 'Grocery', user1._id, "77", null,[]);
+        // const trans6 = await transactionData.addTransaction([user3._id,user4._id], 'Apna', 'Grocery', user3._id, "20", null,[]);
 
 
 
