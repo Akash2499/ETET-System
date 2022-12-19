@@ -29,9 +29,9 @@ async function main() {
 
 
         //groups ceation between different users
-        const group1 = await groupData.createGroup([user1._id,user2._id,user3._id],'North St',[],user1._id);
-        const group2 = await groupData.createGroup([user3._id,user4._id], 'Beach St', [],user4._id);
-        const group3 = await groupData.createGroup([user1._id,user2._id,user3._id,user4._id],'All Boyz', [],user3._id);
+        const group1 = await groupData.createGroup([user2._id,user3._id],'North St',[],user1._id);
+        const group2 = await groupData.createGroup([user3._id], 'Beach St', [],user4._id);
+        const group3 = await groupData.createGroup([user1._id,user2._id,user4._id],'All Boyz', [],user3._id);
 
 
         await userData.addGroupToUser(user1._id,user2._id)
