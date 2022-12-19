@@ -5,11 +5,11 @@ import './Navbar.css';
 
 function Navbar(props) {
 
-	const logout = (event) => {
+	const logout = async (event) => {
 		event.preventDefault()
 		sessionStorage.removeItem("userId")
 		if(sessionStorage.getItem("oauth")){
-			logoutOauth();
+			await logoutOauth();
 		}
 		window.location.href = "/"
 	}
