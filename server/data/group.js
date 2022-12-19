@@ -16,7 +16,7 @@ const createGroup = async (
     helper.checkGroupTransactions(transactions)
     helper.checkObjectId(createBy)
 
-    name = name.trim()
+    name = name.toString().trim()
     members.push(createBy)
     members = members.map((m)=>ObjectId(m.trim()))
     transactions = transactions.map((t)=>t.trim())
@@ -48,8 +48,8 @@ const updateGroup = async (
     helper.checkGroupName(name)
     helper.checkGroupTransactions(transactions)
 
-    groupId = groupId.trim()
-    name = name.trim()
+    groupId = groupId.toString().trim()
+    name = name.toString().trim()
     members = members.map((m)=>m.trim())
     transactions = transactions.map((t)=>t.trim())
 
@@ -96,7 +96,7 @@ const getAllGroups = async () => {
 
 const getGroupById = async (groupId) => {
     helper.checkObjectId(groupId)
-    groupId = groupId.trim()
+    groupId = groupId.toString().trim()
     const groupCollection = await groups();
     const groupObj = await groupCollection.findOne({_id: ObjectId(groupId)})
     if(!groupObj || groupObj==undefined)
@@ -106,7 +106,7 @@ const getGroupById = async (groupId) => {
 
 const getGroupsByUser = async (userId) => {
     helper.checkObjectId(userId)
-    userId = userId.trim()
+    userId = userId.toString().trim()
     let userData = await users.getUserDetails(userId)
     return userData.groups
 }

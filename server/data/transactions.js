@@ -23,7 +23,7 @@ const addTransaction = async (
     //helper.checkUserId(userIds)
     userIds.map((uid)=>{
         helper.checkObjectId(uid.userId)
-        uid.userId.trim()
+        uid.userId.toString().trim()
     })
     helper.checkString(name)
     helper.checkObjectId(paidBy)
@@ -33,7 +33,7 @@ const addTransaction = async (
     
     name = name.trim()
     category = category.trim()
-    paidBy = ObjectId(paidBy.trim())
+    paidBy = ObjectId(paidBy.toString().trim())
     transactionDate = transactionDate || helper.getTodaysDate()
     comments.map((c)=>{
         c._id = new ObjectId()
@@ -54,7 +54,7 @@ const addTransaction = async (
     if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Error while adding transaction'
 
     //await user.addTransactionToUser(paidBy, insertInfo.insertedId.toString())
-    userIds.map(async (u)=>{
+    await userIds.map(async (u)=>{
         await user.addTransactionToUser(u.userId.toString(), insertInfo.insertedId.toString())
     })
 

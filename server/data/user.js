@@ -195,6 +195,7 @@ const addGroupToUser = async (userId, groupId) => {
     let currentUser = await getUserDetails(userId);
     currentUser.groups.push(groupId)
 
+    //currentUser.groups =  currentUser.groups.map((m)=> {return ObjectId(m)})
     const userCollection = await users();
     const info = await userCollection.replaceOne(
         {_id: ObjectId(userId)},
