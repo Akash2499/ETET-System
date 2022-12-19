@@ -83,7 +83,58 @@ async function main() {
         // const trans5 = await transactionData.addTransaction([user1._id,user4._id], 'Apna', 'Grocery', user1._id, "77", null,[]);
         // const trans6 = await transactionData.addTransaction([user3._id,user4._id], 'Apna', 'Grocery', user3._id, "20", null,[]);
 
+        //Adding comments to ransactions 
 
+        const comment1 = await transactionData.addCommentToTransaction(trans2._id,'This is a comment on trancation');
+        const comment2 = await transactionData.addCommentToTransaction(trans2._id,'This is second comment on trancation');
+        const comment3 = await transactionData.addCommentToTransaction(trans3._id,'This is a comment on trancation');
+        const comment4 = await transactionData.addCommentToTransaction(trans3._id,'This is second comment on trancation');
+        const comment5 = await transactionData.addCommentToTransaction(trans4._id,'This is a comment on trancation');
+        const comment6 = await transactionData.addCommentToTransaction(trans4._id,'This is second comment on trancation');
+        const comment7 = await transactionData.addCommentToTransaction(trans5._id,'This is a comment on trancation');
+        const comment8 = await transactionData.addCommentToTransaction(trans5._id,'This is second comment on trancation');
+        const comment9 = await transactionData.addCommentToTransaction(trans7._id,'This is a comment on trancation');
+        const comment10 = await transactionData.addCommentToTransaction(trans7._id,'This is second comment on trancation');
+        const comment11 = await transactionData.addCommentToTransaction(trans8._id,'This is a comment on trancation');
+        const comment12 = await transactionData.addCommentToTransaction(trans8._id,'This is second comment on trancation');
+        const comment13 = await transactionData.addCommentToTransaction(trans9._id,'This is a comment on trancation');
+        const comment14 = await transactionData.addCommentToTransaction(trans9._id,'This is second comment on trancation');
+        const comment15 = await transactionData.addCommentToTransaction(trans10._id,'This is a comment on trancation');
+        const comment16 = await transactionData.addCommentToTransaction(trans10._id,'This is second comment on trancation');
+        const comment17 = await transactionData.addCommentToTransaction(trans11._id,'This is second comment on trancation');
+        const comment18 = await transactionData.addCommentToTransaction(trans11._id,'This is a comment on trancation');
+        const comment19 = await transactionData.addCommentToTransaction(trans12._id,'This is second comment on trancation');
+        const comment20 = await transactionData.addCommentToTransaction(trans13._id,'This is a comment on trancation');
+        const comment21 = await transactionData.addCommentToTransaction(trans14._id,'This is a comment on trancation');
+        const comment22 = await transactionData.addCommentToTransaction(trans14._id,'This is second comment on trancation');
+        const comment23 = await transactionData.addCommentToTransaction(trans15._id,'This is a comment on trancation');
+        const comment24 = await transactionData.addCommentToTransaction(trans15._id,'This is second comment on trancation');
+        const comment25 = await transactionData.addCommentToTransaction(trans16._id,'This is a comment on trancation');
+        const comment26 = await transactionData.addCommentToTransaction(trans16._id,'This is second comment on trancation');
+        const comment27 = await transactionData.addCommentToTransaction(trans17._id,'This is second comment on trancation');
+        const comment28 = await transactionData.addCommentToTransaction(trans17._id,'This is a comment on trancation');
+        const comment29 = await transactionData.addCommentToTransaction(trans18._id,'This is second comment on trancation');
+        const comment30 = await transactionData.addCommentToTransaction(trans18._id,'This is a comment on trancation');
+        const comment31 = await transactionData.addCommentToTransaction(trans19._id,'This is a comment on trancation');
+        const comment32 = await transactionData.addCommentToTransaction(trans19._id,'This is second comment on trancation');
+        const comment33 = await transactionData.addCommentToTransaction(trans20._id,'This is a comment on trancation');
+        const comment34 = await transactionData.addCommentToTransaction(trans20._id,'This is second comment on trancation');
+        const comment35 = await transactionData.addCommentToTransaction(trans21._id,'This is a comment on trancation');
+        const comment36 = await transactionData.addCommentToTransaction(trans21._id,'This is second comment on trancation');
+        const comment37 = await transactionData.addCommentToTransaction(trans22._id,'This is second comment on trancation');
+        const comment38 = await transactionData.addCommentToTransaction(trans32._id,'This is a comment on trancation');
+        const comment39 = await transactionData.addCommentToTransaction(trans32._id,'This is second comment on trancation');
+        const comment40 = await transactionData.addCommentToTransaction(trans30._id,'This is a comment on trancation');
+        const comment41 = await transactionData.addCommentToTransaction(trans30._id,'This is a comment on trancation');
+        const comment42 = await transactionData.addCommentToTransaction(trans30._id,'This is second comment on trancation');
+        const comment43 = await transactionData.addCommentToTransaction(trans31._id,'This is a comment on trancation');
+        const comment44 = await transactionData.addCommentToTransaction(trans31._id,'This is second comment on trancation');
+        const comment45 = await transactionData.addCommentToTransaction(trans33._id,'This is a comment on trancation');
+        const comment46 = await transactionData.addCommentToTransaction(trans33._id,'This is second comment on trancation');
+        const comment47 = await transactionData.addCommentToTransaction(trans34._id,'This is second comment on trancation');
+        const comment48 = await transactionData.addCommentToTransaction(trans35._id,'This is a comment on trancation');
+        const comment49 = await transactionData.addCommentToTransaction(trans35._id,'This is second comment on trancation');
+        const comment50 = await transactionData.addCommentToTransaction(trans36._id,'This is a comment on trancation');
 
 
 
