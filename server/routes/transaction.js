@@ -3,6 +3,7 @@ const router = express.Router();
 const helper = require('../helper');
 const data = require('../data');
 const transactionData = data.transactions;    
+const xss = require('xss');
 
 router
   .route('/:transactionId')
@@ -37,13 +38,13 @@ router
   .route('/addtransaction')
   .post(async (req, res) => {
     try {
-        let userIds = req.body.userIds
-        let name = req.body.name
-        let category = req.body.category
-        let paidBy = req.body.paidBy
-        let amount = req.body.amount
-        let groupId = req.body.groupId
-        let comments = req.body.comments
+        let userIds = xss(req.body.userIds)
+        let name = xss(req.body.name)
+        let category = xss(req.body.category)
+        let paidBy = xss(req.body.paidBy)
+        let amount = xss(req.body.amount)
+        let groupId = xss(req.body.groupId)
+        let comments = xss(req.body.comments)
 
         let response = await transactionData.addTransaction(
             userIds,
@@ -67,13 +68,13 @@ router
   .put(async (req, res) => {
     try {
         let transactionId = req.params.transactionId
-        let userIds = req.body.userIds
-        let name = req.body.name
-        let category = req.body.category
-        let paidBy = req.body.paidBy
-        let groupId = req.body.groupId
-        let comments = req.body.comments
-        let transactionDate = req.body.transactionDate
+        let userIds = xss(req.body.userIds)
+        let name = xss(req.body.name)
+        let category = xss(req.body.category)
+        let paidBy = xss(req.body.paidBy)
+        let groupId = xss(req.body.groupId)
+        let comments = xss(req.body.comments)
+        let transactionDate = xss(req.body.transactionDate)
 
         let response = await transactionData.updateTransaction(
             transactionId,
@@ -97,7 +98,7 @@ router
   .post(async (req, res) => {  
     try {
         let transactionId = req.params.transactionId
-        let comments = req.body.comments
+        let comments = xss(req.body.comments)
     
         let response = await transactionData.updateCommentToTransaction(transactionId, comments)
         if(response.modified)
@@ -113,7 +114,7 @@ router
   .post(async (req, res) => {  
     try {
         let transactionId = req.params.transactionId
-        let comment = req.body.comment
+        let comment = xss(req.body.comment)
     
         let response = await transactionData.addCommentToTransaction(transactionId, comment)
         if(response.modified)
@@ -126,7 +127,7 @@ router
   .put(async (req, res) => {  
     try {
         let transactionId = req.params.transactionId
-        let comment = req.body.comment
+        let comment = xss(req.body.comment)
     
         let response = await transactionData.updateCommentToTransaction(transactionId, comment)
         if(response.modified)
@@ -142,7 +143,7 @@ router
   .delete(async (req, res) => {  
     try {
         let transactionId = req.params.transactionId
-        let commentId = req.params.commentId
+        let commentId = xss(req.params.commentId)
     
         let response = await transactionData.deleteCommentToTransaction(transactionId, commentId)
         if(response.modified)
