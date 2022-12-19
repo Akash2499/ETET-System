@@ -52,7 +52,7 @@ class Home extends React.Component {
           } else {
             t.userIds.map((u)=>{
               if(u.userId == userId.toString() && !u.paid){
-                oweD[u.userId] = (oweD[u.userId] ? oweD[u.userId] : 0) + Math.abs(u.amountOwed)
+                oweD[t.paidBy] = (oweD[t.paidBy] ? oweD[t.paidBy] : 0) + Math.abs(u.amountOwed)
                 owe += Math.abs(u.amountOwed)
               }
             })
@@ -131,7 +131,6 @@ class Home extends React.Component {
       name = usr.firstName+" "+usr.lastName
     }).catch((e)=>{})
     let id = JSON.parse(event.target.id)
-    console.log(id,"<<<<<<<")
     let url = this.backendUrl+"/sendEmail"
     await axios.post(url, {
       userEmail : id.email,

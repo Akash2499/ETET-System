@@ -59,7 +59,7 @@ const addTransaction = async (
     for (i=0; i< userIds.length;i++){
         await user.addTransactionToUser(userIds[i].userId.toString(),insertInfo.insertedId.toString());
     }
-    if(groupId != null)
+    if(groupId != null && groupId != "")
         await group.addTransactionToGroup(groupId.toString(),insertInfo.insertedId.toString());
 
     return { inserted : true , _id : insertInfo.insertedId.toString()};

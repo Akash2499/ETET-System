@@ -216,9 +216,8 @@ const getUserbyEmail = async(email) =>{
     return userPresent
 
     }catch(e){
-        console.log("User not present")
+        throw "User not found!!"
     }
-
 }
 
 const deleteTransactionOfUser = async (userId,transactionId) =>{

@@ -25,6 +25,35 @@ router.route("/validate").post(async (req, res) => {
   }
 });
 
+router.route("/register/oauth").post(async(req,res)=>{
+  try{
+    let firstName = xss(req.body.firstName.split(" ")[0])
+    let lastName = xss(req.body.firstName.split(" ")[1])
+    lastName = lastName?lastName:"Patel"
+    let dateOfBirth = req.body.dateOfBirth ? req.body.dateOfBirth: "07/05/1998"
+    let email = xss(req.body.email);
+    let password = "oauthPassword";
+    let budget = "100"; 
+
+    let response = await userData.createUserFirebase(
+      firstName,
+      lastName,
+      dateOfBirth,
+      email,
+      password,
+      budget
+    )
+    if(response){
+      return res.status(200).send({userId: response._id.toString()});
+    }else{
+      throw "User cannot be added!!"
+    }
+    
+  }catch(e){
+    return res.status(400).send({ Error: e });
+  }
+})
+
 router.route("/register").post(async (req, res) => {
   try {
     let firstName = xss(req.body.firstName);
@@ -55,44 +84,14 @@ router.route("/register").post(async (req, res) => {
   }
 });
 
-router.route("/getUserByEmail").get(async(req,res)=>{
+router.route("/getUserByEmail").post(async(req,res)=>{
   try{
     let email = xss(req.body.email)
-    let users = await userData.getUserbyEmail(email)
-    return users
+    let u = await userData.getUserbyEmail(email)
+    return res.send({users : u})
 
   }catch(e){
-    console.log(e)
-
-  }
-})
-router.route("/register/oauth").post(async(rer,res)=>{
-  try{
-    let firstName = xss(req.body.firstName.split(" ")[0])
-    let lastName = xss(req.body.firstName.split(" ")[1])
-    lastName = lastName?lastName:"Patel"
-    let dateOfBirth = xss(req.body.dateOfBirth);
-    dateOfBirth = dateOfBirth?dateOfBirth: "07/05/1998"
-    let email = xss(req.body.email);
-    let password = "oauthPassword";
-    let budget = "100"; 
-
-    let response = await userData.createUserFirebase(
-      firstName,
-      lastName,
-      dateOfBirth,
-      email,
-      password,
-      budget
-    )
-    if(response){
-      return res.status(200).send({userId: response._id.toString()});
-    }else{
-      throw "User cannot be added!!"
-    }
-    
-  }catch(e){
-    return res.status(400).send({ Error: e });
+    return res.send({users : null})
   }
 })
 

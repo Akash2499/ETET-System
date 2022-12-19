@@ -21,34 +21,32 @@ function OauthLogin(){
       } ;
     }, [user, loading]);
 
-
     const getData = async(user) =>{
-        let url = DATA_URL + "/users/getUserByEmail"
-        let newUrl = DATA_URL + "/users/register/oauth"
+        let url = DATA_URL + "/getUserByEmail"
+        let newUrl = DATA_URL + "/register/oauth"
         let newBody = {
             firstName: user.displayName,
             email: user.email,
         }
-        try{
-        const userData =  await axios.get(url, user.email)
-        if(userData){
-            alert("User already present in database!!")
-        }
-        }catch(e){
+        await axios.post(url, {email : user.email})
+        .then(async (d)=>{
+          if(d.data.users) {
+            sessionStorage.setItem("userId", d.data.users._id.toString())
+            window.location.href = "/"
+          } else {
             await axios
             .post(newUrl, newBody)
             .then((data)=>{
-                console.log(data)
                 sessionStorage.setItem("userId", data.data.userId)
                 sessionStorage.setItem("email", user.email)
                 sessionStorage.setItem("oauth", true)
-                navigate("/my-activities")  
+                window.location.href = "/"
             })
             .catch((e)=>{
                 console.log(e)
             })
-
-        }
+          }
+        })
     }
     getData(user)
 
