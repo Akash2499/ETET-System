@@ -40,7 +40,9 @@ class MyActivity extends React.Component {
       allCategory : [
         "Food" ,
         "Travel" ,
-        "Shopping"
+        "Shopping",
+        "Entertainment",
+        "Other"
       ],
       transactionByCategory : [],
       transactionByMonth : [],
@@ -369,11 +371,14 @@ class MyActivity extends React.Component {
     })
     .then((d)=>{
       if(d.data.modified){
+      this.toggleComment()
        window.location.reload()
+      } else {
+        this.toggleComment()
       }
     })
     .catch((err)=>{
-      console.log(err)
+      this.toggleComment()
     })
   }
 
