@@ -31,7 +31,6 @@ const createUser = async (
     helper.checkDOB(dateOfBirth);
     helper.checkEmail(email);
     helper.checkPassword(password);
-    console.log(budget)
     helper.checkBudget(budget);
 
     email = email.trim().toLowerCase();
