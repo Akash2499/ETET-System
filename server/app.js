@@ -62,7 +62,7 @@ app.use('/sendEmail', (req,res) => {
   helper.checkString(subject);
   helper.checkString(message);
 
-  console.log(userEmail,subject,message)
+  
   email.sendEmail(userEmail,subject,message);
   return res.status(200).send('Email Sent Successfully!')
   // if(emailSent){
