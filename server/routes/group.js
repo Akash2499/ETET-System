@@ -49,11 +49,11 @@ router
   .post(async (req,res) => {
     try{
       let members = req.body.members;
-      let groupName = req.body.name;
-      let createBy = req.body.userId;
+      let groupName = xss(req.body.name);
+      let createBy = xss(req.body.userId);
       let transactions = [];
 
-      let response = await groupData.createGroup(xss(members),xss(groupName),transactions, createBy);
+      let response = await groupData.createGroup(members,groupName,transactions, createBy);
       if(response.inserted)
         return res.status(200).send({ inserted : true })
     }catch (e) {

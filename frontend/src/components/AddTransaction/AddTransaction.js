@@ -20,7 +20,9 @@ class AddTransaction extends React.Component {
         allCategory : [
           { name: "Food" },
           { name: "Travel" } ,
-          { name: "Shopping"}
+          { name: "Shopping"},
+          { name: "Entertainment"},
+          { name: "Other"}
         ],
         selectedPaidByUser : [],
         selectedPaidToUser : [],
@@ -132,12 +134,15 @@ class AddTransaction extends React.Component {
       commentedBy : sessionStorage.getItem("userId"),
       comment : this.state.comments
     }]
-    let userIds = this.state.transactionMembers.map((t)=>{
-      return {
+    let userIds = []
+    for(let i=0;i<this.state.transactionMembers.length;i++){
+      let t = this.state.transactionMembers[i]
+      userIds.push({
         userId : t._id.toString(),
         amountOwed : -t.amountOwed
-      }
-    })
+      })
+    }
+  
     let body = {
       name,
       category,
