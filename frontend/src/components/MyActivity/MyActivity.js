@@ -12,6 +12,7 @@ import { Chart as ChartJS,
 import { Pie, Bar } from 'react-chartjs-2';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Multiselect from 'multiselect-react-dropdown';
+import { ElementsConsumer, CardElement } from "@stripe/react-stripe-js";
 
 class MyActivity extends React.Component {
 
@@ -58,6 +59,8 @@ class MyActivity extends React.Component {
       selectedMonth2 : [],
       compareData : {},
       showBar : false,
+      pay : false,
+      selectedPayTransaction : ""
     };
   }
 
@@ -177,8 +180,8 @@ class MyActivity extends React.Component {
     }
 
     console.log(gDataset)
-
     this.setState({allT : allT, transactionByCategory : cDataset, transactionByMonth : mDataset, transactionByGroups : gDataset})
+
   }
 
   handleInput = (event) => {
@@ -202,23 +205,8 @@ class MyActivity extends React.Component {
 
   payNow = async (event) => {
     event.preventDefault()
-    this.setState({loading: true})
-    let id = event.target.id
-    let tObj = JSON.parse(id)
-    tObj.userIds.map((user)=>{
-      if(user.userId.toString()==sessionStorage.getItem("userId").toString()){
-        user.paid = true
-      }
-    })
-    let url = this.backendUrl+"/transactions/edittransaction/"+tObj._id.toString()
-    await axios.put(url, tObj)
-    .then((data)=>{
-      if(data.data.modified){
-        this.setState({loading :  false})
-        window.location.reload()
-      }
-    })
-    this.setState({loading: false})
+    this.setState({selectedPayTransaction : event.target.id})
+    this.togglePay()
   }
 
   amountClicked = async (event) => {
@@ -257,6 +245,10 @@ class MyActivity extends React.Component {
 
   toggleComment = () => {
     this.setState({commentModal : !this.state.commentModal})
+  }
+
+  togglePay = () => {
+    this.setState({pay : !this.state.pay})
   }
 
   alreadyPaid = (t) => {
@@ -459,6 +451,61 @@ class MyActivity extends React.Component {
     this.setState({compareData : res, showBar:true})
   }
 
+  handleSubmit = async (event) => {
+    event.preventDefault()
+    this.setState({loading: true})
+    const { stripe, elements } = this.props;
+    if (!stripe || !elements) {
+      return;
+    }
+
+    const card = elements.getElement(CardElement);
+    const result = await stripe.createToken(card);
+    if (result.error) {
+      console.log(result.error.message);
+    } else {
+      console.log(result.token);
+      let tt = JSON.parse(this.state.selectedPayTransaction)
+      let sum = 0
+      for(let i=0;i<tt.userIds.length;i++){
+          let u = tt.userIds[i]
+          if(u.userId.toString()==sessionStorage.getItem("userId").toString()){
+              sum = u.amountOwed
+          }
+      }
+
+      let url = this.backendUrl+"/transactions/madepayment"
+      await axios.post(url,{
+        token : result.token.id,
+        transaction : this.state.selectedPayTransaction,
+        amount: Math.abs(sum)
+      })
+      .then(async (d)=>{
+       if(d.data.success) {
+          let id = this.state.selectedPayTransaction
+          let tObj = JSON.parse(id)
+          tObj.userIds.map((user)=>{
+            if(user.userId.toString()==sessionStorage.getItem("userId").toString()){
+              user.paid = true
+            }
+          })
+          let url = this.backendUrl+"/transactions/edittransaction/"+tObj._id.toString()
+          await axios.put(url, tObj)
+          .then((data)=>{
+            if(data.data.modified){
+              this.setState({loading :  false})
+              window.location.reload()
+            }
+          })
+          this.setState({loading: false})
+          }
+        })
+      .catch((err)=>{
+        console.log(err)
+      })
+    }
+  }
+
   display = () => {
     return (
       <React.Fragment>
@@ -584,6 +631,26 @@ class MyActivity extends React.Component {
           </ModalFooter>
         </Modal>
 
+        <Modal isOpen={this.state.pay} toggle={this.togglePay}>
+          <ModalHeader toggle={this.togglePay}>Checkout</ModalHeader>
+          <ModalBody>
+            <form onSubmit={this.handleSubmit}>
+              <CardElement/><br></br><br></br>
+              <button className="btn btn-sm btn-success">
+                {
+                    this.state.loading ?
+                    <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                    </div> : "Pay"
+                }
+              </button>
+            </form>
+          </ModalBody>
+          <ModalFooter>
+            <button className="btn btn-danger" color="secondary" onClick={this.togglePay}>Cancel</button>
+          </ModalFooter>
+        </Modal>
+
         <Modal isOpen={this.state.commentModal} toggle={this.toggleComment}>
           <ModalHeader toggle={this.toggleComment}>Transaction Comments</ModalHeader>
           <ModalBody>
@@ -603,7 +670,7 @@ class MyActivity extends React.Component {
                       <td>
                         {
                           n.editClicked ?
-                          <input type="text" id={n._id ? n._id+"#"+i : "#"+i} value={n.comment} onChange={this.handleCommentText}/>
+                          <input className="comment-modal" type="text" id={n._id ? n._id+"#"+i : "#"+i} value={n.comment} onChange={this.handleCommentText}/>
                           : n.comment
                         }
                       </td>
@@ -644,4 +711,14 @@ class MyActivity extends React.Component {
   }
 }
 
-export default MyActivity;
+export default function InjectedMyActivity() {
+  return (
+    <ElementsConsumer>
+      {({ stripe, elements }) => (
+        <MyActivity stripe={stripe} elements={elements} />
+      )}
+    </ElementsConsumer>
+  );
+}
+
+// export default MyActivity;

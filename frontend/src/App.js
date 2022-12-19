@@ -15,8 +15,13 @@ import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import Login from './components/Login/Login';
 import PublicRoute from './components/PublicRoute/PublicRoute';
 import AddFriend from './components/AddFriend/AddFriend';
+import {loadStripe} from '@stripe/stripe-js';
+import { Elements } from "@stripe/react-stripe-js";
+
+const stripePromise = loadStripe('pk_test_51MGVBFA0I90WTCRy9JdcGVgymbHqI03M11W2J3IoieS6MlxyHX0RGEdGnbLgGXnGFSRpse2ASoih1GaqhuiyZbTe00CayEV0R8');
 
 function App() {
+
   return (
     <BrowserRouter>
       <Main>
@@ -31,11 +36,19 @@ function App() {
           </Routing>
 
           <Routing exact path="/" element={<PrivateRoute/>}>
-            <Routing exact path="/" element={<Home/>} />
+           <Routing exact path="/" element={
+              <Elements stripe={stripePromise}>
+               <Home/>
+              </Elements>
+            } />
           </Routing>
 
           <Routing exact path="/my-activities" element={<PrivateRoute/>}>
-            <Routing exact path="/my-activities" element={<MyActivity/>} />
+            <Routing exact path="/my-activities" element={
+              <Elements stripe={stripePromise}>
+               <MyActivity/>
+              </Elements>
+            } />
           </Routing>
 
           <Routing exact path="/add-transaction" element={<PrivateRoute/>}>

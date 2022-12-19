@@ -8,6 +8,7 @@ const data = require('./');
 const userData = data.users;    
 const user = require('./user');
 const group = require('./group');
+const stripe = require('stripe')('sk_test_51MGVBFA0I90WTCRync2pHMmQJS9yNROSpzn7RcyebYFhD8Dkjy9iMTvdaaEeDvnCY1FWrbtkByoWx8lFib4pkhj700zkE1nza8');
 
 const addTransaction = async (
     userIds,
@@ -212,6 +213,30 @@ const getAllTransactions = async () => {
     return transactionsList
 }
 
+const madePayment = async (token, transaction, price) => {
+
+    transaction = JSON.parse(transaction)
+    stripe.charges.create(
+    {
+        amount: price.toFixed(2)*100,
+        currency: 'usd',
+        source: token,
+        description: transaction.name,
+        metadata: {
+            productId: transaction._id.toString()
+        }
+    },
+    (err, charge) => {
+        if(err) {
+            return {success : false}
+        }
+        else {
+            return {success : true}
+        }
+    })
+    return {success : true}
+}
+
 module.exports = {
     addTransaction,
     updateTransaction,
@@ -220,5 +245,6 @@ module.exports = {
     updateCommentToTransaction,
     deleteCommentToTransaction,
     getTransactionById,
-    getAllTransactions
+    getAllTransactions,
+    madePayment
 }
