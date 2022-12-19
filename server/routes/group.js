@@ -3,7 +3,7 @@ const router = express.Router();
 const helper = require('../helper');
 const data = require('../data');
 const groupData = data.groups;    
-
+const xss = require('xss');
 router
   .route('/:groupId')
   .get(async (req, res) => {
@@ -35,7 +35,7 @@ router
       let groupName = req.body.name;
       let transactions = [];
 
-      let response = await groupData.updateGroup(groupId,members,groupName,transactions);
+      let response = await groupData.updateGroup(groupId,xss(members),xss(groupName),transactions);
       if(response.inserted)
         return res.status(200).send({ inserted : true })
     }catch (e) {
@@ -53,7 +53,7 @@ router
       let createBy = req.body.userId;
       let transactions = [];
 
-      let response = await groupData.createGroup(members,groupName,transactions, createBy);
+      let response = await groupData.createGroup(xss(members),xss(groupName),transactions, createBy);
       if(response.inserted)
         return res.status(200).send({ inserted : true })
     }catch (e) {
