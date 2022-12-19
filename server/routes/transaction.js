@@ -154,4 +154,20 @@ router
       }
   })
 
+  router
+  .route('/madepayment')
+  .post(async (req, res) => {  
+    try {
+      let token = req.body.token
+      let transaction = req.body.transaction
+      let amount = req.body.amount
+        let response = await transactionData.madePayment(token, transaction, amount)
+        if(response.success)
+            return res.status(200).send({ success : true })
+        return res.status(400).send({ success : false })
+      } catch (e) {
+        return res.status(400).send({ Error: e });
+      }
+  })
+
 module.exports = router;

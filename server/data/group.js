@@ -16,9 +16,9 @@ const createGroup = async (
     helper.checkGroupTransactions(transactions)
     helper.checkObjectId(createBy)
 
-    name = name.trim()
+    name = name.toString().trim()
     members.push(createBy)
-    members = members.map((m)=>ObjectId(m.trim()))
+    members = members.map((m)=>ObjectId(m.toString().trim()))
     transactions = transactions.map((t)=>t.trim())
 
     const groupCollection = await groups()
@@ -28,12 +28,13 @@ const createGroup = async (
         transactions,
     });
 
-    await members.map(async (m)=>{
-        await users.addGroupToUser(m.toString(), insertInfo.insertedId.toString())
-    })
+
+    for( i = 0; i < members.length; i++){
+        await users.addGroupToUser(members[i].toString(),insertInfo.insertedId.toString())
+    }
     
     if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Error while adding group'
-    return { inserted : true }
+    return { inserted : true , _id: insertInfo.insertedId}
 }
 
 const updateGroup = async (
@@ -48,8 +49,8 @@ const updateGroup = async (
     helper.checkGroupName(name)
     helper.checkGroupTransactions(transactions)
 
-    groupId = groupId.trim()
-    name = name.trim()
+    groupId = groupId.toString().trim()
+    name = name.toString().trim()
     members = members.map((m)=>m.trim())
     transactions = transactions.map((t)=>t.trim())
 
@@ -96,7 +97,7 @@ const getAllGroups = async () => {
 
 const getGroupById = async (groupId) => {
     helper.checkObjectId(groupId)
-    groupId = groupId.trim()
+    groupId = groupId.toString().trim()
     const groupCollection = await groups();
     const groupObj = await groupCollection.findOne({_id: ObjectId(groupId)})
     if(!groupObj || groupObj==undefined)
@@ -106,9 +107,26 @@ const getGroupById = async (groupId) => {
 
 const getGroupsByUser = async (userId) => {
     helper.checkObjectId(userId)
-    userId = userId.trim()
+    userId = userId.toString().trim()
     let userData = await users.getUserDetails(userId)
     return userData.groups
+}
+
+const addTransactionToGroup = async (groupId,transactionId) => {
+    helper.checkObjectId(groupId);
+    helper.checkObjectId(transactionId);
+    let group = await getGroupById(groupId);
+    group.transactions.push(transactionId)
+
+    const groupCollection = await groups();
+    const info = await groupCollection.updateOne(
+        {_id: ObjectId(groupId)},
+        { $set: { transactions : group.transactions }}
+      );
+      if(info.modifiedCount === 0){
+        throw new Error('Cannot update User');
+      }
+    return await getGroupById(groupId)
 }
 
 module.exports = {
@@ -117,5 +135,6 @@ module.exports = {
     deleteGroup,
     getAllGroups,
     getGroupsByUser,
-    getGroupById
+    getGroupById,
+    addTransactionToGroup
 }

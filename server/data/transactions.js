@@ -8,6 +8,7 @@ const data = require('./');
 const userData = data.users;    
 const user = require('./user');
 const group = require('./group');
+const stripe = require('stripe')('sk_test_51MGVBFA0I90WTCRync2pHMmQJS9yNROSpzn7RcyebYFhD8Dkjy9iMTvdaaEeDvnCY1FWrbtkByoWx8lFib4pkhj700zkE1nza8');
 
 const addTransaction = async (
     userIds,
@@ -23,7 +24,7 @@ const addTransaction = async (
     //helper.checkUserId(userIds)
     userIds.map((uid)=>{
         helper.checkObjectId(uid.userId)
-        uid.userId.trim()
+        uid.userId.toString().trim()
     })
     helper.checkString(name)
     helper.checkObjectId(paidBy)
@@ -33,7 +34,7 @@ const addTransaction = async (
     
     name = name.trim()
     category = category.trim()
-    paidBy = ObjectId(paidBy.trim())
+    paidBy = ObjectId(paidBy.toString().trim())
     transactionDate = transactionDate || helper.getTodaysDate()
     comments.map((c)=>{
         c._id = new ObjectId()
@@ -54,9 +55,12 @@ const addTransaction = async (
     if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Error while adding transaction'
 
     //await user.addTransactionToUser(paidBy, insertInfo.insertedId.toString())
-    userIds.map(async (u)=>{
-        await user.addTransactionToUser(u.userId.toString(), insertInfo.insertedId.toString())
-    })
+    
+    for (i=0; i< userIds.length;i++){
+        await user.addTransactionToUser(userIds[i].userId.toString(),insertInfo.insertedId.toString());
+    }
+    if(groupId != null)
+        await group.addTransactionToGroup(groupId.toString(),insertInfo.insertedId.toString());
 
     return { inserted : true };
 }
@@ -209,6 +213,30 @@ const getAllTransactions = async () => {
     return transactionsList
 }
 
+const madePayment = async (token, transaction, price) => {
+
+    transaction = JSON.parse(transaction)
+    stripe.charges.create(
+    {
+        amount: price.toFixed(2)*100,
+        currency: 'usd',
+        source: token,
+        description: transaction.name,
+        metadata: {
+            productId: transaction._id.toString()
+        }
+    },
+    (err, charge) => {
+        if(err) {
+            return {success : false}
+        }
+        else {
+            return {success : true}
+        }
+    })
+    return {success : true}
+}
+
 module.exports = {
     addTransaction,
     updateTransaction,
@@ -217,5 +245,6 @@ module.exports = {
     updateCommentToTransaction,
     deleteCommentToTransaction,
     getTransactionById,
-    getAllTransactions
+    getAllTransactions,
+    madePayment
 }
