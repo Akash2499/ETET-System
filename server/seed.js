@@ -33,37 +33,37 @@ async function main() {
 
         //Group 1 Transactions
     
-        const trans2 = await transactionData.addTransaction([{ userId: user4._id, amountOwed: '15' },{userId: user5._id, amountOwed: '5'},{userId :user6._id, amountOwed:'10'}],'Patel Grocery', 'Food', user4._id, "30",group4._id,[]);
-        const trans3 = await transactionData.addTransaction([{ userId: user4._id, amountOwed: '15.5' },{userId: user5._id, amountOwed: '10'},{userId :user6._id, amountOwed:'10.5'}],'Patel Grocery', 'Food', user5._id, "36",group4._id,[]);
-        const trans4 = await transactionData.addTransaction([{ userId: user4._id, amountOwed: '150' },{userId: user5._id, amountOwed: '70'},{userId :user6._id, amountOwed:'0'}],'Zara', 'Shopping', user4._id, "220",group4._id,[]);
-        const trans5 = await transactionData.addTransaction([{ userId: user4._id, amountOwed: '20' },{userId: user5._id, amountOwed: '20'},{userId :user6._id, amountOwed:'20'}],'Amc', 'Entertanment', user5._id, "60",group4._id,[]);
-        const trans7 = await transactionData.addTransaction([{ userId: user4._id, amountOwed: '10' },{userId: user5._id, amountOwed: '10'},{userId :user6._id, amountOwed:'10'}],'Plumber', 'Others', user5._id, "30",group4._id,[]);
-        const trans8 = await transactionData.addTransaction([{ userId: user4._id, amountOwed: '15' },{userId: user5._id, amountOwed: '10'},{userId :user6._id, amountOwed:'10'}],'Dinner', 'Food', user5._id, "35",group4._id,[]);
+        const trans2 = await transactionData.addTransaction([{ userId: user4._id, amountOwed: '-15' },{userId: user5._id, amountOwed: '-5'},{userId :user6._id, amountOwed:'-10'}],'Patel Grocery', 'Food', user4._id, "30",group4._id,[]);
+        const trans3 = await transactionData.addTransaction([{ userId: user4._id, amountOwed: '-15.5' },{userId: user5._id, amountOwed: '-10'},{userId :user6._id, amountOwed:'-10.5'}],'Patel Grocery', 'Food', user5._id, "36",group4._id,[]);
+        const trans4 = await transactionData.addTransaction([{ userId: user4._id, amountOwed: '-150' },{userId: user5._id, amountOwed: '-70'},{userId :user6._id, amountOwed:'-0'}],'Zara', 'Shopping', user4._id, "220",group4._id,[]);
+        const trans5 = await transactionData.addTransaction([{ userId: user4._id, amountOwed: '-20' },{userId: user5._id, amountOwed: '-20'},{userId :user6._id, amountOwed:'-20'}],'Amc', 'Entertanment', user5._id, "60",group4._id,[]);
+        const trans7 = await transactionData.addTransaction([{ userId: user4._id, amountOwed: '-10' },{userId: user5._id, amountOwed: '-10'},{userId :user6._id, amountOwed:'-10'}],'Plumber', 'Others', user5._id, "30",group4._id,[]);
+        const trans8 = await transactionData.addTransaction([{ userId: user4._id, amountOwed: '-15' },{userId: user5._id, amountOwed: '-10'},{userId :user6._id, amountOwed:'-10'}],'Dinner', 'Food', user5._id, "35",group4._id,[]);
 
-        const trans9 = await transactionData.addTransaction([{ userId: user1._id, amountOwed: '15' },{userId: user2._id, amountOwed: '5'},{userId :user4._id, amountOwed:'10'}],'Apna Grocery', 'Food', user1._id, "30",group3._id,[]);
-        const trans10 = await transactionData.addTransaction([{ userId: user1._id, amountOwed: '150.5' },{userId: user2._id, amountOwed: '70'},{userId :user4._id, amountOwed:'30'}],'Sams Grocery', 'Food', user2._id, "250.5",group3._id,[]);
-        const trans11 = await transactionData.addTransaction([{ userId: user1._id, amountOwed: '15' },{userId: user2._id, amountOwed: '7'},{userId :user4._id, amountOwed:'0'}],'H&M', 'Shopping', user4._id, "22",group3._id,[]);
-        const trans12 = await transactionData.addTransaction([{ userId: user1._id, amountOwed: '20' },{userId: user2._id, amountOwed: '20'},{userId :user4._id, amountOwed:'20'}],'Amc', 'Entertanment', user1._id, "60",group3._id,[]);
-        const trans13 = await transactionData.addTransaction([{ userId: user1._id, amountOwed: '100' },{userId: user2._id, amountOwed: '100'},{userId :user4._id, amountOwed:'0'}],'Maintainance', 'Others', user4._id, "200",group3._id,[]);
-        const trans14 = await transactionData.addTransaction([{ userId: user1._id, amountOwed: '15' },{userId: user2._id, amountOwed: '10'},{userId :user4._id, amountOwed:'10'}],'Lunch', 'Food', user2._id, "35",group3._id,[]);
+        const trans9 = await transactionData.addTransaction([{ userId: user1._id, amountOwed: '-15' },{userId: user2._id, amountOwed: '-5'},{userId :user4._id, amountOwed:'-10'}],'Apna Grocery', 'Food', user1._id, "30",group3._id,[]);
+        const trans10 = await transactionData.addTransaction([{ userId: user1._id, amountOwed: '-150.5' },{userId: user2._id, amountOwed: '-70'},{userId :user4._id, amountOwed:'-30'}],'Sams Grocery', 'Food', user2._id, "250.5",group3._id,[]);
+        const trans11 = await transactionData.addTransaction([{ userId: user1._id, amountOwed: '-15' },{userId: user2._id, amountOwed: '-7'},{userId :user4._id, amountOwed:'-0'}],'H&M', 'Shopping', user4._id, "22",group3._id,[]);
+        const trans12 = await transactionData.addTransaction([{ userId: user1._id, amountOwed: '-20' },{userId: user2._id, amountOwed: '-20'},{userId :user4._id, amountOwed:'-20'}],'Amc', 'Entertanment', user1._id, "60",group3._id,[]);
+        const trans13 = await transactionData.addTransaction([{ userId: user1._id, amountOwed: '-100' },{userId: user2._id, amountOwed: '-100'},{userId :user4._id, amountOwed:'-0'}],'Maintainance', 'Others', user4._id, "200",group3._id,[]);
+        const trans14 = await transactionData.addTransaction([{ userId: user1._id, amountOwed: '-15' },{userId: user2._id, amountOwed: '-10'},{userId :user4._id, amountOwed:'-10'}],'Lunch', 'Food', user2._id, "35",group3._id,[]);
 
-        const trans30 = await transactionData.addTransaction([{ userId: user2._id, amountOwed: '15' },{userId: user3._id, amountOwed: '5'},{userId :user7._id, amountOwed:'10'}],'Apna Grocery', 'Food', user2._id, "30",group1._id,[]);
-        const trans31 = await transactionData.addTransaction([{ userId: user2._id, amountOwed: '150.5' },{userId: user3._id, amountOwed: '70'},{userId :user7._id, amountOwed:'30'}],'Sams Grocery', 'Food', user3._id, "250.5",group1._id,[]);
-        const trans32 = await transactionData.addTransaction([{ userId: user2._id, amountOwed: '15' },{userId: user3._id, amountOwed: '7'},{userId :user7._id, amountOwed:'0'}],'H&M', 'Shopping', user7._id, "22",group1._id,[]);
-        const trans33 = await transactionData.addTransaction([{ userId: user2._id, amountOwed: '20' },{userId: user3._id, amountOwed: '20'},{userId :user7._id, amountOwed:'20'}],'Amc', 'Entertanment', user2._id, "60",group1._id,[]);
-        const trans34 = await transactionData.addTransaction([{ userId: user2._id, amountOwed: '100' },{userId: user3._id, amountOwed: '100'},{userId :user7._id, amountOwed:'0'}],'Maintainance', 'Others', user3._id, "200",group1._id,[]);
-        const trans35 = await transactionData.addTransaction([{ userId: user2._id, amountOwed: '15' },{userId: user3._id, amountOwed: '10'},{userId :user7._id, amountOwed:'10'}],'Lunch', 'Food', user7._id, "35",group1._id,[]);
+        const trans30 = await transactionData.addTransaction([{ userId: user2._id, amountOwed: '-15' },{userId: user3._id, amountOwed: '-5'},{userId :user7._id, amountOwed:'-10'}],'Apna Grocery', 'Food', user2._id, "30",group1._id,[]);
+        const trans31 = await transactionData.addTransaction([{ userId: user2._id, amountOwed: '-150.5' },{userId: user3._id, amountOwed: '-70'},{userId :user7._id, amountOwed:'-30'}],'Sams Grocery', 'Food', user3._id, "250.5",group1._id,[]);
+        const trans32 = await transactionData.addTransaction([{ userId: user2._id, amountOwed: '-15' },{userId: user3._id, amountOwed: '-7'},{userId :user7._id, amountOwed:'-0'}],'H&M', 'Shopping', user7._id, "22",group1._id,[]);
+        const trans33 = await transactionData.addTransaction([{ userId: user2._id, amountOwed: '-20' },{userId: user3._id, amountOwed: '-20'},{userId :user7._id, amountOwed:'-20'}],'Amc', 'Entertanment', user2._id, "60",group1._id,[]);
+        const trans34 = await transactionData.addTransaction([{ userId: user2._id, amountOwed: '-100' },{userId: user3._id, amountOwed: '-100'},{userId :user7._id, amountOwed:'-0'}],'Maintainance', 'Others', user3._id, "200",group1._id,[]);
+        const trans35 = await transactionData.addTransaction([{ userId: user2._id, amountOwed: '-15' },{userId: user3._id, amountOwed: '-10'},{userId :user7._id, amountOwed:'-10'}],'Lunch', 'Food', user7._id, "35",group1._id,[]);
 
-        const trans36 = await transactionData.addTransaction([{ userId: user4._id, amountOwed: '15' },{userId: user1._id, amountOwed: '5'},{userId :user3._id, amountOwed:'10'}],'Patel Grocery', 'Food', user4._id, "30",group2._id,[]);
-        const trans37 = await transactionData.addTransaction([{ userId: user4._id, amountOwed: '150.5' },{userId: user1._id, amountOwed: '100'},{userId :user3._id, amountOwed:'100.5'}],'Cosco Grocery', 'Food', user5._id, "351",group2._id,[]);
-        const trans38 = await transactionData.addTransaction([{ userId: user4._id, amountOwed: '20' },{userId: user1._id, amountOwed: '40'},{userId :user3._id, amountOwed:'33.33'}],'Zara', 'Shopping', user4._id, "93.33",group2._id,[]);
-        const trans39 = await transactionData.addTransaction([{ userId: user4._id, amountOwed: '20' },{userId: user1._id, amountOwed: '20'},{userId :user3._id, amountOwed:'20'}],'Top Golf', 'Entertanment', user5._id, "60",group2._id,[]);
-        const trans40 = await transactionData.addTransaction([{ userId: user4._id, amountOwed: '10' },{userId: user1._id, amountOwed: '10'},{userId :user3._id, amountOwed:'10'}],'Repair', 'Others', user5._id, "30",group2._id,[]);
-        const trans41 = await transactionData.addTransaction([{ userId: user4._id, amountOwed: '15' },{userId: user1._id, amountOwed: '10'},{userId :user3._id, amountOwed:'10'}],'Dinner and desert', 'Food', user5._id, "35",group2._id,[]);
+        const trans36 = await transactionData.addTransaction([{ userId: user4._id, amountOwed: '-15' },{userId: user1._id, amountOwed: '-5'},{userId :user3._id, amountOwed:'-10'}],'Patel Grocery', 'Food', user4._id, "30",group2._id,[]);
+        const trans37 = await transactionData.addTransaction([{ userId: user4._id, amountOwed: '-150.5' },{userId: user1._id, amountOwed: '-100'},{userId :user3._id, amountOwed:'-100.5'}],'Cosco Grocery', 'Food', user5._id, "351",group2._id,[]);
+        const trans38 = await transactionData.addTransaction([{ userId: user4._id, amountOwed: '-20' },{userId: user1._id, amountOwed: '-40'},{userId :user3._id, amountOwed:'-33.33'}],'Zara', 'Shopping', user4._id, "93.33",group2._id,[]);
+        const trans39 = await transactionData.addTransaction([{ userId: user4._id, amountOwed: '-20' },{userId: user1._id, amountOwed: '-20'},{userId :user3._id, amountOwed:'-20'}],'Top Golf', 'Entertanment', user5._id, "60",group2._id,[]);
+        const trans40 = await transactionData.addTransaction([{ userId: user4._id, amountOwed: '-10' },{userId: user1._id, amountOwed: '-10'},{userId :user3._id, amountOwed:'-10'}],'Repair', 'Others', user5._id, "30",group2._id,[]);
+        const trans41 = await transactionData.addTransaction([{ userId: user4._id, amountOwed: '-15' },{userId: user1._id, amountOwed: '-10'},{userId :user3._id, amountOwed:'-10'}],'Dinner and desert', 'Food', user5._id, "35",group2._id,[]);
 
 
-        //Group 1 Transactions
-        const trans1 = await transactionData.addTransaction([{ userId: user1._id, amountOwed: '-5' },{userId: user2._id, amountOwed: '-5'},{userId :user3._id, amountOwed:'-2.5'}],'Uber', 'Travel', user2._id, "12.50",group1._id,[]);
+     
+        
 
         const trans15 = await transactionData.addTransaction([{ userId: user6._id, amountOwed: '-15' },{userId: user8._id, amountOwed: '-25'},{userId :user9._id, amountOwed:'-25'}],'Transaction 15', 'Travel', user5._id, "65",group5._id,[],'11/15/2022');
         const trans16 = await transactionData.addTransaction([{ userId: user6._id, amountOwed: '-300' },{userId: user8._id, amountOwed: '-50'},{userId :user9._id, amountOwed:'-25'}],'Transaction 16', 'Food', user5._id, "375",group5._id,[]);
@@ -73,6 +73,20 @@ async function main() {
         const trans20 = await transactionData.addTransaction([{ userId: user5._id, amountOwed: '-300' },{userId: user6._id, amountOwed: '-50'},{userId :user9._id, amountOwed:'-25'}],'Transaction 20', 'Other', user8._id, "375",group5._id,[]);
         const trans21 = await transactionData.addTransaction([{ userId: user5._id, amountOwed: '-15' },{userId: user6._id, amountOwed: '-25'},{userId :user9._id, amountOwed:'-25'}],'Transaction 21', 'Travel', user8._id, "650",group5._id,[]);
         const trans22 = await transactionData.addTransaction([{ userId: user5._id, amountOwed: '-300' },{userId: user6._id, amountOwed: '-50'},{userId :user9._id, amountOwed:'-25'}],'Transaction 22', 'Other', user8._id, "375",group5._id,[]);
+
+
+        const trans50 = await transactionData.addTransaction([{ userId: user1._id, amountOwed: '-300' },{userId: user2._id, amountOwed: '-75'}],'T1', 'Food', user1._id, "375",null,[]);
+        const trans51 = await transactionData.addTransaction([{ userId: user1._id, amountOwed: '-100.5' },{userId: user3._id, amountOwed: '-50'}],'T2', 'Travel', user3._id, "150.5",null,[]);
+        const trans52 = await transactionData.addTransaction([{ userId: user1._id, amountOwed: '-120' },{userId: user6._id, amountOwed: '-15.7'}],'T3', 'Others', user1._id, "135.7",null,[]);
+
+        const trans53 = await transactionData.addTransaction([{ userId: user2._id, amountOwed: '-300' },{userId: user5._id, amountOwed: '-75'}],'T4', 'Food', user2._id, "375",null,[]);
+        const trans54 = await transactionData.addTransaction([{ userId: user2._id, amountOwed: '-100.5' },{userId: user6._id, amountOwed: '-50'}],'T5', 'Travel', user2._id, "150.5",null,[]);
+        const trans55 = await transactionData.addTransaction([{ userId: user2._id, amountOwed: '-120' },{userId: user7._id, amountOwed: '-15.7'}],'T6', 'Others', user2._id, "135.7",null,[]);
+
+        const trans56 = await transactionData.addTransaction([{ userId: user4._id, amountOwed: '-300' },{userId: user1._id, amountOwed: '-75'}],'T4', 'Food', user4._id, "375",null,[]);
+        const trans57 = await transactionData.addTransaction([{ userId: user4._id, amountOwed: '-100.5' },{userId: user8._id, amountOwed: '-50'}],'T5', 'Travel', user4._id, "150.5",null,[]);
+        const trans58 = await transactionData.addTransaction([{ userId: user4._id, amountOwed: '-120' },{userId: user3._id, amountOwed: '-15.7'}],'T6', 'Others', user4._id, "135.7",null,[]);
+
 
         //await userData.addGroupToUser(user1._id,user2._id)
         //add transcations to groups
