@@ -62,7 +62,7 @@ const addTransaction = async (
     if(groupId != null && groupId != "")
         await group.addTransactionToGroup(groupId.toString(),insertInfo.insertedId.toString());
 
-    return { inserted : true };
+    return { inserted : true , _id : insertInfo.insertedId.toString()};
 }
 
 const addCommentToTransaction = async (transactionId, comment) => {
