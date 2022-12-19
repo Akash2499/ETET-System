@@ -9,7 +9,7 @@ async function main() {
     const db = await dbConnection.dbConnection();
     await db.dropDatabase();
   
-    // try{
+    try{
         //Multiple users addition
         const user1 = await userData.createUser('Akash', 'Patel','01/24/1999','akash1999patel@gmail.com','Akash@1234','500');
         const user2 = await userData.createUser('Harshil', 'Dani', '02/18/2000', 'dani@gmail.com', 'Dani@1234', '100');
@@ -20,28 +20,26 @@ async function main() {
         const user7 = await userData.createUser('Jayraj', 'Kanani', '10/10/1999', 'kanani18@gmail.com', 'Kanani@1234', '550');
         const user8 = await userData.createUser('Aashay', 'Pandya', '06/06/1999', 'pandy06@gmail.com', 'Pandya@1234', '200');
         const user9 = await userData.createUser('Achal', 'Shah', '06/23/1999', 'achal06@gmail.com', 'Achal@1234', '2200');
-        const user10 = await userData.createUser('Pranav', 'Parikh', '12/13/1989', 'pranav@gmail.com', 'Pranav@1234', '270');
-        const user11 = await userData.createUser('Raj', 'Bhagat', '12/15/1999', 'rajb@gmail.com', 'Raj@1234', '2800');
-        const user12 = await userData.createUser('Anmol', 'Bhow', '11/17/2000', 'bhow12@gmail.com', 'Bhow@1234', '3000');
-        const user13 = await userData.createUser('Samyak', 'Shah', '10/17/1998', 'samboy2@gmail.com', 'Gareb@1234', '15');
-        const user14 = await userData.createUser('Ankush', 'Desai', '11/02/2000', 'Ankush@gmail.com', 'Ankush@1234', '300');
-        const user15 = await userData.createUser('Devshree', 'Parikh', '02/22/2000', 'dpparikh@gmail.com', 'Devshree@1234', '4000');
-
-
+        
         //groups ceation between different users
-        const group1 = await groupData.createGroup([user2._id,user3._id],'North St',[],user1._id);
+        const group1 = await groupData.createGroup([user2._id,user3._id],'North St',[],user7._id);
         const group2 = await groupData.createGroup([user3._id], 'Beach St', [],user4._id);
         const group3 = await groupData.createGroup([user1._id,user2._id,user4._id],'All Boyz', [],user3._id);
         const group4 = await groupData.createGroup([user4._id,user5._id,user6._id],'Group 4', [],user1._id);
         const group5 = await groupData.createGroup([user5._id,user8._id,user9._id],'Group 5', [],user6._id);
-        const group6 = await groupData.createGroup([user6._id,user13._id,user10._id],'Group 6', [],user15._id);
-        const group7 = await groupData.createGroup([user7._id,user11._id,user13._id],'Group 7', [],user14._id);
-        const group8 = await groupData.createGroup([user8._id,user12._id,user13._id],'Group 8', [],user10._id);
-        const group9 = await groupData.createGroup([user9._id,user15._id,user14._id],'Group 9', [],user11._id);
 
 
         //Group 1 Transactions
-        const trans1 = await transactionData.addTransaction([{ userId: user1._id, amountOwed: '5' },{userId: user2._id, amountOwed: '5'},{userId :user3._id, amountOwed:'2.5'}],'Uber', 'Travel', user2._id, "12.50",group1._id,[]);
+        const trans1 = await transactionData.addTransaction([{ userId: user1._id, amountOwed: '-5' },{userId: user2._id, amountOwed: '-5'},{userId :user3._id, amountOwed:'-2.5'}],'Uber', 'Travel', user2._id, "12.50",group1._id,[]);
+
+        const trans15 = await transactionData.addTransaction([{ userId: user6._id, amountOwed: '-15' },{userId: user8._id, amountOwed: '-25'},{userId :user9._id, amountOwed:'-25'}],'Transaction 15', 'Travel', user5._id, "65",group5._id,[],'11/15/2022');
+        const trans16 = await transactionData.addTransaction([{ userId: user6._id, amountOwed: '-300' },{userId: user8._id, amountOwed: '-50'},{userId :user9._id, amountOwed:'-25'}],'Transaction 16', 'Food', user5._id, "375",group5._id,[]);
+        const trans17 = await transactionData.addTransaction([{ userId: user5._id, amountOwed: '-15' },{userId: user9._id, amountOwed: '-25'},{userId :user8._id, amountOwed:'-25'}],'Transaction 17', 'Travel', user6._id, "650",group5._id,[]);
+        const trans18 = await transactionData.addTransaction([{ userId: user5._id, amountOwed: '-300' },{userId: user9._id, amountOwed: '-50'},{userId :user8._id, amountOwed:'-25'}],'Transaction 18', 'Food', user6._id, "375",group5._id,[]);
+        const trans19 = await transactionData.addTransaction([{ userId: user5._id, amountOwed: '-15' },{userId: user6._id, amountOwed: '-25'},{userId :user9._id, amountOwed:'-25'}],'Transaction 19', 'Travel', user8._id, "65",group5._id,[]);
+        const trans20 = await transactionData.addTransaction([{ userId: user5._id, amountOwed: '-300' },{userId: user6._id, amountOwed: '-50'},{userId :user9._id, amountOwed:'-25'}],'Transaction 20', 'Other', user8._id, "375",group5._id,[]);
+        const trans21 = await transactionData.addTransaction([{ userId: user5._id, amountOwed: '-15' },{userId: user6._id, amountOwed: '-25'},{userId :user9._id, amountOwed:'-25'}],'Transaction 21', 'Travel', user8._id, "650",group5._id,[]);
+        const trans22 = await transactionData.addTransaction([{ userId: user5._id, amountOwed: '-300' },{userId: user6._id, amountOwed: '-50'},{userId :user9._id, amountOwed:'-25'}],'Transaction 22', 'Other', user8._id, "375",group5._id,[]);
 
         //await userData.addGroupToUser(user1._id,user2._id)
         //add transcations to groups
@@ -57,10 +55,10 @@ async function main() {
 
 
         console.log('-------------------------------------------------------------------------------------------------------')
-    // }
-    // catch(e){
-    //     console.log(e.toString());
-    // }
+    }
+    catch(e){
+        console.log(e.toString());
+    }
     console.log('Done seeding database');
   
     dbConnection.closeConnection();
