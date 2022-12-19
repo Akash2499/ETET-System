@@ -150,6 +150,38 @@ async function main() {
         const comment49 = await transactionData.addCommentToTransaction(trans35._id,'This is second comment on trancation');
         const comment50 = await transactionData.addCommentToTransaction(trans36._id,'This is a comment on trancation');
 
+        
+        const friend1 = await userData.addFriendToUser(user1._id,user2._id);
+        const friend2 = await userData.addFriendToUser(user1._id,user3._id);
+        const friend3 = await userData.addFriendToUser(user1._id,user4._id);
+        const friend4 = await userData.addFriendToUser(user1._id,user5._id);
+        const friend5 = await userData.addFriendToUser(user1._id,user6._id);
+        const friend6 = await userData.addFriendToUser(user1._id,user7._id);
+        const friend7 = await userData.addFriendToUser(user1._id,user8._id);
+        const friend8 = await userData.addFriendToUser(user1._id,user9._id);
+
+        const friend9 = await userData.addFriendToUser(user2._id,user3._id);
+        const friend10 = await userData.addFriendToUser(user2._id,user4._id);
+        const friend11 = await userData.addFriendToUser(user2._id,user5._id);
+        const friend12 = await userData.addFriendToUser(user2._id,user6._id);
+        const friend13 = await userData.addFriendToUser(user2._id,user7._id);
+        const friend14 = await userData.addFriendToUser(user2._id,user8._id);
+        const friend15 = await userData.addFriendToUser(user2._id,user9._id);
+
+        const friend16 = await userData.addFriendToUser(user3._id,user4._id);
+        const friend17 = await userData.addFriendToUser(user3._id,user5._id);
+        const friend18 = await userData.addFriendToUser(user3._id,user6._id);
+        const friend19 = await userData.addFriendToUser(user3._id,user7._id);
+        const friend21 = await userData.addFriendToUser(user3._id,user8._id);
+        const friend20 = await userData.addFriendToUser(user3._id,user9._id);
+
+        const friend24 = await userData.addFriendToUser(user4._id,user5._id);
+        const friend25 = await userData.addFriendToUser(user4._id,user6._id);
+        const friend26 = await userData.addFriendToUser(user4._id,user7._id);
+        const friend27 = await userData.addFriendToUser(user4._id,user8._id);
+        const friend28 = await userData.addFriendToUser(user4._id,user9._id);
+        
+
 
 
         console.log('-------------------------------------------------------------------------------------------------------')
