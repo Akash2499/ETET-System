@@ -18,7 +18,7 @@ const createGroup = async (
 
     name = name.toString().trim()
     members.push(createBy)
-    members = members.map((m)=>ObjectId(m.trim()))
+    members = members.map((m)=>ObjectId(m.toString().trim()))
     transactions = transactions.map((t)=>t.trim())
 
     const groupCollection = await groups()
@@ -28,12 +28,13 @@ const createGroup = async (
         transactions,
     });
 
-    await members.map(async (m)=>{
-        await users.addGroupToUser(m.toString(), insertInfo.insertedId.toString())
-    })
+
+    for( i = 0; i < members.length; i++){
+        await users.addGroupToUser(members[i].toString(),insertInfo.insertedId.toString())
+    }
     
     if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Error while adding group'
-    return { inserted : true }
+    return { inserted : true , _id: insertInfo.insertedId}
 }
 
 const updateGroup = async (
@@ -111,11 +112,29 @@ const getGroupsByUser = async (userId) => {
     return userData.groups
 }
 
+const addTransactionToGroup = async (groupId,transactionId) => {
+    helper.checkObjectId(groupId);
+    helper.checkObjectId(transactionId);
+    let group = await getGroupById(groupId);
+    group.transactions.push(transactionId)
+
+    const groupCollection = await groups();
+    const info = await groupCollection.updateOne(
+        {_id: ObjectId(groupId)},
+        { $set: { transactions : group.transactions }}
+      );
+      if(info.modifiedCount === 0){
+        throw new Error('Cannot update User');
+      }
+    return await getGroupById(groupId)
+}
+
 module.exports = {
     createGroup,
     updateGroup,
     deleteGroup,
     getAllGroups,
     getGroupsByUser,
-    getGroupById
+    getGroupById,
+    addTransactionToGroup
 }

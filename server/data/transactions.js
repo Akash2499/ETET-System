@@ -54,9 +54,12 @@ const addTransaction = async (
     if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Error while adding transaction'
 
     //await user.addTransactionToUser(paidBy, insertInfo.insertedId.toString())
-    await userIds.map(async (u)=>{
-        await user.addTransactionToUser(u.userId.toString(), insertInfo.insertedId.toString())
-    })
+    
+    for (i=0; i< userIds.length;i++){
+        await user.addTransactionToUser(userIds[i].userId.toString(),insertInfo.insertedId.toString());
+    }
+    if(groupId != null)
+        await group.addTransactionToGroup(groupId.toString(),insertInfo.insertedId.toString());
 
     return { inserted : true };
 }
