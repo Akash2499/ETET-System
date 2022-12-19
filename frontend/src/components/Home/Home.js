@@ -2,6 +2,7 @@ import React from "react";
 import './Home.css'
 import axios from "axios";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { ElementsConsumer, CardElement } from "@stripe/react-stripe-js";
 
 class Home extends React.Component {
 
@@ -16,7 +17,9 @@ class Home extends React.Component {
       open : false,
       notify : false,
       resOwe : [],
-      resOwned : []
+      resOwned : [],
+      pay : false,
+      selectedPayTransaction : ""
     };
   }
 
@@ -48,7 +51,7 @@ class Home extends React.Component {
             })
           } else {
             t.userIds.map((u)=>{
-              if(u.userId == userId.toString()){
+              if(u.userId == userId.toString() && !u.paid){
                 oweD[u.userId] = (oweD[u.userId] ? oweD[u.userId] : 0) + Math.abs(u.amountOwed)
                 owe += Math.abs(u.amountOwed)
               }
@@ -69,7 +72,7 @@ class Home extends React.Component {
         let usr = d.data.userObj
         res1.push({
           name: usr.firstName+" "+usr.lastName,
-          email: usr.username,
+          email: usr.email,
           id: k,
           amount: oweD[k]
         })
@@ -84,7 +87,7 @@ class Home extends React.Component {
         let usr = d.data.userObj
         res2.push({
           name: usr.firstName+" "+usr.lastName,
-          email: usr.username,
+          email: usr.email,
           id: k,
           amount: ownedD[k]
         })
@@ -117,13 +120,105 @@ class Home extends React.Component {
     this.setState({notify : false})
   }
 
-  sendNotification = (event) => {
+  sendNotification = async (event) => {
     event.preventDefault()
+    let usrId = sessionStorage.getItem("userId")
+    let u = this.backendUrl+"/users/"+usrId
+    let name = ""
+    await axios.get(u)
+    .then((dd)=>{
+      let usr = dd.data.userObj
+      name = usr.firstName+" "+usr.lastName
+    }).catch((e)=>{})
+    let id = JSON.parse(event.target.id)
+    console.log(id,"<<<<<<<")
+    let url = this.backendUrl+"/sendEmail"
+    await axios.post(url, {
+      userEmail : id.email,
+      subject : "Note : You currently owe $"+id.amount+" to "+name,
+      message : "Hey there,\n This is just a note to settle up on ETET as soon as you get the chance. You can visit our page for details on who owes what: http://localhost:3000/\n\nThanks,\nETET\n"
+    }).then((d)=>{
+      alert(`${d.data}`)
+    })
+    .catch((e)=>{
+      alert(`${e}`)
+    })
+  }
+
+  togglePay = () => {
+    this.setState({pay : !this.state.pay})
   }
 
   settle = (event) => {
     event.preventDefault()
+    this.togglePay()
+    this.setState({selectedPayTransaction : event.target.id})
   }
+
+  handleSubmit = async (event) => {
+    event.preventDefault()
+    this.setState({loading: true})
+    const { stripe, elements } = this.props;
+    if (!stripe || !elements) {
+      return;
+    }
+
+    let selected = JSON.parse(this.state.selectedPayTransaction)
+
+    const card = elements.getElement(CardElement);
+    const result = await stripe.createToken(card);
+    if (result.error) {
+      console.log(result.error.message);
+    } else {
+      console.log(result.token);
+      
+      let url = this.backendUrl+"/transactions/madepayment"
+      await axios.post(url,{
+        token : result.token.id,
+        transaction : JSON.stringify({
+          name : "Settle Up - "+selected.name,
+          _id : selected.id
+        }),
+        amount: Math.abs(selected.amount)
+      })
+      .then(async (d)=>{
+       if(d.data.success) {
+
+        let paidTo = selected.id
+        url = this.backendUrl+"/users/"+paidTo
+        await axios.get(url)
+        .then(async (u)=>{
+          let usr = u.data.userObj
+          let tra = usr.transactions
+          for(let i=0;i<tra.length;i++){
+            url = this.backendUrl+"/transactions/"+tra[i]
+            await axios.get(url)
+            .then(async (t)=>{
+              let ttt = t.data.transactionObj
+              ttt.userIds.map((user)=>{
+                if(user.userId.toString()==sessionStorage.getItem("userId").toString()){
+                  user.paid = true
+                }
+              })
+              url = this.backendUrl+"/transactions/edittransaction/"+ttt._id.toString()
+              await axios.put(url, ttt)
+              .catch((e)=>{
+                console.log(e)
+              })
+            })
+          }
+          
+        })
+        }
+        this.setState({loading: false})
+        window.location.reload()
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
+    }
+  }
+
 
   display = () => {
     return (
@@ -134,7 +229,7 @@ class Home extends React.Component {
               <div className="card-body owned">
                 <p>You owned total</p>
                 <p>{this.state.owned}</p>
-                <button className="btn btn-success" onClick={this.remind}>Remind</button>
+                <button className="btn btn-success" onClick={this.remind}>Notify</button>
               </div>
             </div>
           </div>
@@ -166,7 +261,7 @@ class Home extends React.Component {
                       <td>{n.name}</td>
                       <td className="green">{n.amount}</td>
                       <td>
-                        <button id={JSON.stringify(n)} className="btn btn-sm btn-success" onClick={this.sendNotification}>Notify</button>
+                        <button id={JSON.stringify(n)} className="btn btn-sm btn-success" onClick={this.sendNotification}>Remind</button>
                       </td>
                     </tr>
                   })
@@ -188,6 +283,26 @@ class Home extends React.Component {
             <button className="btn btn-danger" color="secondary" onClick={this.toggle}>Cancel</button>
           </ModalFooter>
         </Modal>
+        
+        <Modal isOpen={this.state.pay} toggle={this.togglePay}>
+          <ModalHeader toggle={this.togglePay}>Checkout</ModalHeader>
+          <ModalBody>
+            <form onSubmit={this.handleSubmit}>
+              <CardElement/><br></br><br></br>
+              <button className="btn btn-sm btn-success">
+                {
+                    this.state.loading ?
+                    <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                    </div> : "Pay"
+                }
+              </button>
+            </form>
+          </ModalBody>
+          <ModalFooter>
+            <button className="btn btn-danger" color="secondary" onClick={this.togglePay}>Cancel</button>
+          </ModalFooter>
+        </Modal>
 
       </React.Fragment>
     )
@@ -198,4 +313,12 @@ class Home extends React.Component {
   }
 }
 
-export default Home;
+export default function InjectedHome() {
+  return (
+    <ElementsConsumer>
+      {({ stripe, elements }) => (
+        <Home stripe={stripe} elements={elements} />
+      )}
+    </ElementsConsumer>
+  );
+}

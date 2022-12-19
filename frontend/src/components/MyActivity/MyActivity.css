@@ -41,3 +41,7 @@
     height: 20em;
     text-align: -webkit-center !important;
 }
+
+.comment-modal{
+    max-width: 8.5em;
+}
