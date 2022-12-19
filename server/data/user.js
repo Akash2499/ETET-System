@@ -292,8 +292,8 @@ const addFriendToUser = async (userId,friendId) => {
     helper.checkObjectId(userId);
     helper.checkObjectId(friendId);
 
-    userId = userId.trim();
-    friendId = friendId.trim();
+    userId = userId.toString().trim();
+    friendId = friendId.toString().trim();
 
     let user = await getUserDetails(userId);
     let friend = await getUserDetails(friendId);
